@@ -1,0 +1,50 @@
+server:
+  port: 23333
+  servlet:
+    context-path: /
+
+#  ssl:
+#    #SSL证书路径 一定要加上classpath:
+#    key-store: classpath:sendWater.jks
+#    #SSL证书密码
+#    key-store-password: UvFo0W0B
+#    #证书类型
+#    key-store-type: JKS
+#    #证书别名
+#    key-alias: alias
+
+spring:
+  datasource:
+    #   数据源基本配置
+    username: root
+    password: zxc0
+    url: jdbc:mysql://localhost:3306/miniurl?characterEncoding=utf8&useSSL=true&serverTimezone=UTC&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #上半区公共部分对应的是 org.springframework.boot.autoconfigure.jdbc.DataSourceProperties 中的属性
+    #下半区属性对应的是 com.alibaba.druid.pool.DruidDataSource 中的属性，Spring Boot 默认是不注入不了这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+    #   数据源其他配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #去掉后监控界面sql无法统计
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰命名
