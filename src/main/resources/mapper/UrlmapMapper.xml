@@ -1,16 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.miniurl.mapper.UrlmapMapper" >
-  <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miniurl.mapper.UrlmapMapper">
+  <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="RESOURSE_ID" property="resourseId" jdbcType="VARCHAR" />
-    <result column="REVISION" property="revision" jdbcType="VARCHAR" />
-    <result column="CREATED_BYUID" property="createdByuid" jdbcType="VARCHAR" />
-    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
-    <result column="UPDATED_TIME" property="updatedTime" jdbcType="TIMESTAMP" />
-    <result column="ORIGINAL_URL" property="originalUrl" jdbcType="VARCHAR" />
-    <result column="ID_TTL" property="idTtl" jdbcType="INTEGER" />
+    <id column="RESOURSE_ID" jdbcType="VARCHAR" property="resourseId" />
+    <result column="ORIGINAL_URL" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="ID_TTL" jdbcType="INTEGER" property="idTtl" />
+    <result column="REVISION" jdbcType="VARCHAR" property="revision" />
+    <result column="CREATED_BY_UID" jdbcType="VARCHAR" property="createdByUid" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RESOURSE_ID" jdbcType="VARCHAR" property="RESOURSE_ID" />
+    <result column="ORIGINAL_URL" jdbcType="VARCHAR" property="ORIGINAL_URL" />
+    <result column="ID_TTL" jdbcType="INTEGER" property="ID_TTL" />
+    <result column="REVISION" jdbcType="VARCHAR" property="REVISION" />
+    <result column="CREATED_BY_UID" jdbcType="VARCHAR" property="CREATED_BY_UID" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="CREATED_TIME" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="UPDATED_TIME" />
   </resultMap>
 </mapper>

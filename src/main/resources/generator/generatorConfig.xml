@@ -28,6 +28,7 @@
                 connectionURL="${jdbc.url}"
                 userId="${jdbc.user}"
                 password="${jdbc.password}">
+            <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
 
         <javaTypeResolver>

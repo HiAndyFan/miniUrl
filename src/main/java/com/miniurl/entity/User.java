@@ -1,720 +1,224 @@
 package com.miniurl.entity;
 
+import java.util.Date;
 import javax.persistence.*;
 
 public class User {
+    /**
+     * 用户id
+     */
     @Id
-    @Column(name = "Host")
-    private String host;
+    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String userId;
 
-    @Id
-    @Column(name = "User")
-    private String user;
-
-    @Column(name = "Password")
-    private String password;
-
-    @Column(name = "Select_priv")
-    private String selectPriv;
-
-    @Column(name = "Insert_priv")
-    private String insertPriv;
-
-    @Column(name = "Update_priv")
-    private String updatePriv;
-
-    @Column(name = "Delete_priv")
-    private String deletePriv;
-
-    @Column(name = "Create_priv")
-    private String createPriv;
-
-    @Column(name = "Drop_priv")
-    private String dropPriv;
-
-    @Column(name = "Reload_priv")
-    private String reloadPriv;
-
-    @Column(name = "Shutdown_priv")
-    private String shutdownPriv;
-
-    @Column(name = "Process_priv")
-    private String processPriv;
-
-    @Column(name = "File_priv")
-    private String filePriv;
-
-    @Column(name = "Grant_priv")
-    private String grantPriv;
-
-    @Column(name = "References_priv")
-    private String referencesPriv;
-
-    @Column(name = "Index_priv")
-    private String indexPriv;
-
-    @Column(name = "Alter_priv")
-    private String alterPriv;
-
-    @Column(name = "Show_db_priv")
-    private String showDbPriv;
-
-    @Column(name = "Super_priv")
-    private String superPriv;
-
-    @Column(name = "Create_tmp_table_priv")
-    private String createTmpTablePriv;
-
-    @Column(name = "Lock_tables_priv")
-    private String lockTablesPriv;
-
-    @Column(name = "Execute_priv")
-    private String executePriv;
-
-    @Column(name = "Repl_slave_priv")
-    private String replSlavePriv;
-
-    @Column(name = "Repl_client_priv")
-    private String replClientPriv;
-
-    @Column(name = "Create_view_priv")
-    private String createViewPriv;
-
-    @Column(name = "Show_view_priv")
-    private String showViewPriv;
-
-    @Column(name = "Create_routine_priv")
-    private String createRoutinePriv;
-
-    @Column(name = "Alter_routine_priv")
-    private String alterRoutinePriv;
-
-    @Column(name = "Create_user_priv")
-    private String createUserPriv;
-
-    @Column(name = "Event_priv")
-    private String eventPriv;
-
-    @Column(name = "Trigger_priv")
-    private String triggerPriv;
-
-    @Column(name = "Create_tablespace_priv")
-    private String createTablespacePriv;
-
-    @Column(name = "ssl_type")
-    private String sslType;
-
-    @Column(name = "max_questions")
-    private Integer maxQuestions;
-
-    @Column(name = "max_updates")
-    private Integer maxUpdates;
-
-    @Column(name = "max_connections")
-    private Integer maxConnections;
-
-    @Column(name = "max_user_connections")
-    private Integer maxUserConnections;
-
-    private String plugin;
-
-    @Column(name = "ssl_cipher")
-    private byte[] sslCipher;
-
-    @Column(name = "x509_issuer")
-    private byte[] x509Issuer;
-
-    @Column(name = "x509_subject")
-    private byte[] x509Subject;
-
-    @Column(name = "authentication_string")
-    private String authenticationString;
-
-    /**
-     * @return Host
-     */
-    public String getHost() {
-        return host;
-    }
-
-    /**
-     * @param host
-     */
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    /**
-     * @return User
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * @param user
-     */
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    /**
-     * @return Password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * @return Select_priv
-     */
-    public String getSelectPriv() {
-        return selectPriv;
-    }
-
-    /**
-     * @param selectPriv
-     */
-    public void setSelectPriv(String selectPriv) {
-        this.selectPriv = selectPriv;
-    }
-
-    /**
-     * @return Insert_priv
-     */
-    public String getInsertPriv() {
-        return insertPriv;
-    }
-
-    /**
-     * @param insertPriv
-     */
-    public void setInsertPriv(String insertPriv) {
-        this.insertPriv = insertPriv;
-    }
-
-    /**
-     * @return Update_priv
-     */
-    public String getUpdatePriv() {
-        return updatePriv;
-    }
-
-    /**
-     * @param updatePriv
-     */
-    public void setUpdatePriv(String updatePriv) {
-        this.updatePriv = updatePriv;
-    }
-
-    /**
-     * @return Delete_priv
-     */
-    public String getDeletePriv() {
-        return deletePriv;
-    }
-
-    /**
-     * @param deletePriv
-     */
-    public void setDeletePriv(String deletePriv) {
-        this.deletePriv = deletePriv;
-    }
-
-    /**
-     * @return Create_priv
-     */
-    public String getCreatePriv() {
-        return createPriv;
-    }
-
-    /**
-     * @param createPriv
-     */
-    public void setCreatePriv(String createPriv) {
-        this.createPriv = createPriv;
-    }
-
-    /**
-     * @return Drop_priv
-     */
-    public String getDropPriv() {
-        return dropPriv;
-    }
-
-    /**
-     * @param dropPriv
-     */
-    public void setDropPriv(String dropPriv) {
-        this.dropPriv = dropPriv;
-    }
-
-    /**
-     * @return Reload_priv
-     */
-    public String getReloadPriv() {
-        return reloadPriv;
-    }
-
-    /**
-     * @param reloadPriv
-     */
-    public void setReloadPriv(String reloadPriv) {
-        this.reloadPriv = reloadPriv;
-    }
-
-    /**
-     * @return Shutdown_priv
-     */
-    public String getShutdownPriv() {
-        return shutdownPriv;
-    }
-
-    /**
-     * @param shutdownPriv
-     */
-    public void setShutdownPriv(String shutdownPriv) {
-        this.shutdownPriv = shutdownPriv;
-    }
-
-    /**
-     * @return Process_priv
-     */
-    public String getProcessPriv() {
-        return processPriv;
-    }
-
-    /**
-     * @param processPriv
-     */
-    public void setProcessPriv(String processPriv) {
-        this.processPriv = processPriv;
-    }
-
-    /**
-     * @return File_priv
-     */
-    public String getFilePriv() {
-        return filePriv;
-    }
-
-    /**
-     * @param filePriv
-     */
-    public void setFilePriv(String filePriv) {
-        this.filePriv = filePriv;
-    }
-
-    /**
-     * @return Grant_priv
-     */
-    public String getGrantPriv() {
-        return grantPriv;
-    }
-
-    /**
-     * @param grantPriv
-     */
-    public void setGrantPriv(String grantPriv) {
-        this.grantPriv = grantPriv;
-    }
-
-    /**
-     * @return References_priv
-     */
-    public String getReferencesPriv() {
-        return referencesPriv;
-    }
-
-    /**
-     * @param referencesPriv
-     */
-    public void setReferencesPriv(String referencesPriv) {
-        this.referencesPriv = referencesPriv;
-    }
-
-    /**
-     * @return Index_priv
-     */
-    public String getIndexPriv() {
-        return indexPriv;
-    }
-
-    /**
-     * @param indexPriv
-     */
-    public void setIndexPriv(String indexPriv) {
-        this.indexPriv = indexPriv;
-    }
-
-    /**
-     * @return Alter_priv
-     */
-    public String getAlterPriv() {
-        return alterPriv;
-    }
-
-    /**
-     * @param alterPriv
-     */
-    public void setAlterPriv(String alterPriv) {
-        this.alterPriv = alterPriv;
-    }
-
-    /**
-     * @return Show_db_priv
-     */
-    public String getShowDbPriv() {
-        return showDbPriv;
-    }
-
-    /**
-     * @param showDbPriv
-     */
-    public void setShowDbPriv(String showDbPriv) {
-        this.showDbPriv = showDbPriv;
-    }
-
-    /**
-     * @return Super_priv
-     */
-    public String getSuperPriv() {
-        return superPriv;
-    }
-
-    /**
-     * @param superPriv
-     */
-    public void setSuperPriv(String superPriv) {
-        this.superPriv = superPriv;
-    }
-
-    /**
-     * @return Create_tmp_table_priv
-     */
-    public String getCreateTmpTablePriv() {
-        return createTmpTablePriv;
-    }
-
-    /**
-     * @param createTmpTablePriv
-     */
-    public void setCreateTmpTablePriv(String createTmpTablePriv) {
-        this.createTmpTablePriv = createTmpTablePriv;
-    }
-
-    /**
-     * @return Lock_tables_priv
-     */
-    public String getLockTablesPriv() {
-        return lockTablesPriv;
-    }
-
-    /**
-     * @param lockTablesPriv
-     */
-    public void setLockTablesPriv(String lockTablesPriv) {
-        this.lockTablesPriv = lockTablesPriv;
-    }
-
-    /**
-     * @return Execute_priv
-     */
-    public String getExecutePriv() {
-        return executePriv;
-    }
-
-    /**
-     * @param executePriv
-     */
-    public void setExecutePriv(String executePriv) {
-        this.executePriv = executePriv;
-    }
-
-    /**
-     * @return Repl_slave_priv
-     */
-    public String getReplSlavePriv() {
-        return replSlavePriv;
-    }
-
-    /**
-     * @param replSlavePriv
-     */
-    public void setReplSlavePriv(String replSlavePriv) {
-        this.replSlavePriv = replSlavePriv;
-    }
-
-    /**
-     * @return Repl_client_priv
-     */
-    public String getReplClientPriv() {
-        return replClientPriv;
-    }
-
-    /**
-     * @param replClientPriv
-     */
-    public void setReplClientPriv(String replClientPriv) {
-        this.replClientPriv = replClientPriv;
-    }
-
-    /**
-     * @return Create_view_priv
-     */
-    public String getCreateViewPriv() {
-        return createViewPriv;
-    }
-
-    /**
-     * @param createViewPriv
-     */
-    public void setCreateViewPriv(String createViewPriv) {
-        this.createViewPriv = createViewPriv;
-    }
-
-    /**
-     * @return Show_view_priv
-     */
-    public String getShowViewPriv() {
-        return showViewPriv;
-    }
-
     /**
-     * @param showViewPriv
+     * 邮箱
      */
-    public void setShowViewPriv(String showViewPriv) {
-        this.showViewPriv = showViewPriv;
-    }
-
-    /**
-     * @return Create_routine_priv
-     */
-    public String getCreateRoutinePriv() {
-        return createRoutinePriv;
-    }
-
-    /**
-     * @param createRoutinePriv
-     */
-    public void setCreateRoutinePriv(String createRoutinePriv) {
-        this.createRoutinePriv = createRoutinePriv;
-    }
-
-    /**
-     * @return Alter_routine_priv
-     */
-    public String getAlterRoutinePriv() {
-        return alterRoutinePriv;
-    }
-
-    /**
-     * @param alterRoutinePriv
-     */
-    public void setAlterRoutinePriv(String alterRoutinePriv) {
-        this.alterRoutinePriv = alterRoutinePriv;
-    }
-
-    /**
-     * @return Create_user_priv
-     */
-    public String getCreateUserPriv() {
-        return createUserPriv;
-    }
-
-    /**
-     * @param createUserPriv
-     */
-    public void setCreateUserPriv(String createUserPriv) {
-        this.createUserPriv = createUserPriv;
-    }
-
-    /**
-     * @return Event_priv
-     */
-    public String getEventPriv() {
-        return eventPriv;
-    }
+    @Column(name = "USER_EMAIL")
+    private String userEmail;
 
     /**
-     * @param eventPriv
+     * 是否验证邮箱
      */
-    public void setEventPriv(String eventPriv) {
-        this.eventPriv = eventPriv;
-    }
+    @Column(name = "USER_EMAIL_VERIFY")
+    private String userEmailVerify;
 
     /**
-     * @return Trigger_priv
+     * 用户名
      */
-    public String getTriggerPriv() {
-        return triggerPriv;
-    }
+    @Column(name = "USER_NAME")
+    private String userName;
 
     /**
-     * @param triggerPriv
+     * 密码
      */
-    public void setTriggerPriv(String triggerPriv) {
-        this.triggerPriv = triggerPriv;
-    }
+    @Column(name = "HASH_PASS")
+    private String hashPass;
 
     /**
-     * @return Create_tablespace_priv
+     * 用户等级
      */
-    public String getCreateTablespacePriv() {
-        return createTablespacePriv;
-    }
+    @Column(name = "USER_CLASS")
+    private String userClass;
 
     /**
-     * @param createTablespacePriv
+     * 创建来源端
      */
-    public void setCreateTablespacePriv(String createTablespacePriv) {
-        this.createTablespacePriv = createTablespacePriv;
-    }
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 
     /**
-     * @return ssl_type
+     * 创建时间
      */
-    public String getSslType() {
-        return sslType;
-    }
+    @Column(name = "CREATED_TIME")
+    private Date createdTime;
 
     /**
-     * @param sslType
+     * 变短次数
      */
-    public void setSslType(String sslType) {
-        this.sslType = sslType;
-    }
+    @Column(name = "URL_NUM")
+    private String urlNum;
 
     /**
-     * @return max_questions
+     * 获取用户id
+     *
+     * @return USER_ID - 用户id
      */
-    public Integer getMaxQuestions() {
-        return maxQuestions;
+    public String getUserId() {
+        return userId;
     }
 
     /**
-     * @param maxQuestions
+     * 设置用户id
+     *
+     * @param userId 用户id
      */
-    public void setMaxQuestions(Integer maxQuestions) {
-        this.maxQuestions = maxQuestions;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
-     * @return max_updates
+     * 获取邮箱
+     *
+     * @return USER_EMAIL - 邮箱
      */
-    public Integer getMaxUpdates() {
-        return maxUpdates;
+    public String getUserEmail() {
+        return userEmail;
     }
 
     /**
-     * @param maxUpdates
+     * 设置邮箱
+     *
+     * @param userEmail 邮箱
      */
-    public void setMaxUpdates(Integer maxUpdates) {
-        this.maxUpdates = maxUpdates;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     /**
-     * @return max_connections
+     * 获取是否验证邮箱
+     *
+     * @return USER_EMAIL_VERIFY - 是否验证邮箱
      */
-    public Integer getMaxConnections() {
-        return maxConnections;
+    public String getUserEmailVerify() {
+        return userEmailVerify;
     }
 
     /**
-     * @param maxConnections
+     * 设置是否验证邮箱
+     *
+     * @param userEmailVerify 是否验证邮箱
      */
-    public void setMaxConnections(Integer maxConnections) {
-        this.maxConnections = maxConnections;
+    public void setUserEmailVerify(String userEmailVerify) {
+        this.userEmailVerify = userEmailVerify;
     }
 
     /**
-     * @return max_user_connections
+     * 获取用户名
+     *
+     * @return USER_NAME - 用户名
      */
-    public Integer getMaxUserConnections() {
-        return maxUserConnections;
+    public String getUserName() {
+        return userName;
     }
 
     /**
-     * @param maxUserConnections
+     * 设置用户名
+     *
+     * @param userName 用户名
      */
-    public void setMaxUserConnections(Integer maxUserConnections) {
-        this.maxUserConnections = maxUserConnections;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**
-     * @return plugin
+     * 获取密码
+     *
+     * @return HASH_PASS - 密码
      */
-    public String getPlugin() {
-        return plugin;
+    public String getHashPass() {
+        return hashPass;
     }
 
     /**
-     * @param plugin
+     * 设置密码
+     *
+     * @param hashPass 密码
      */
-    public void setPlugin(String plugin) {
-        this.plugin = plugin;
+    public void setHashPass(String hashPass) {
+        this.hashPass = hashPass;
     }
 
     /**
-     * @return ssl_cipher
+     * 获取用户等级
+     *
+     * @return USER_CLASS - 用户等级
      */
-    public byte[] getSslCipher() {
-        return sslCipher;
+    public String getUserClass() {
+        return userClass;
     }
 
     /**
-     * @param sslCipher
+     * 设置用户等级
+     *
+     * @param userClass 用户等级
      */
-    public void setSslCipher(byte[] sslCipher) {
-        this.sslCipher = sslCipher;
+    public void setUserClass(String userClass) {
+        this.userClass = userClass;
     }
 
     /**
-     * @return x509_issuer
+     * 获取创建来源端
+     *
+     * @return CREATED_BY - 创建来源端
      */
-    public byte[] getX509Issuer() {
-        return x509Issuer;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
     /**
-     * @param x509Issuer
+     * 设置创建来源端
+     *
+     * @param createdBy 创建来源端
      */
-    public void setX509Issuer(byte[] x509Issuer) {
-        this.x509Issuer = x509Issuer;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     /**
-     * @return x509_subject
+     * 获取创建时间
+     *
+     * @return CREATED_TIME - 创建时间
      */
-    public byte[] getX509Subject() {
-        return x509Subject;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
     /**
-     * @param x509Subject
+     * 设置创建时间
+     *
+     * @param createdTime 创建时间
      */
-    public void setX509Subject(byte[] x509Subject) {
-        this.x509Subject = x509Subject;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     /**
-     * @return authentication_string
+     * 获取变短次数
+     *
+     * @return URL_NUM - 变短次数
      */
-    public String getAuthenticationString() {
-        return authenticationString;
+    public String getUrlNum() {
+        return urlNum;
     }
 
     /**
-     * @param authenticationString
+     * 设置变短次数
+     *
+     * @param urlNum 变短次数
      */
-    public void setAuthenticationString(String authenticationString) {
-        this.authenticationString = authenticationString;
+    public void setUrlNum(String urlNum) {
+        this.urlNum = urlNum;
     }
 }
