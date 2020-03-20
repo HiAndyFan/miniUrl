@@ -137,7 +137,6 @@
                 </dependencies>
             </plugin>
         </plugins>
-
     </build>
 
     <repositories>

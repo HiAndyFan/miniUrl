@@ -16,7 +16,7 @@ class MiniurlApplicationTests {
     @Test
     void password(){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-        String encodePasswod = encoder.encode("123456");
+        String encodePasswod = encoder.encode("zeqide@163.com");
         System.out.println(encodePasswod);
 
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();

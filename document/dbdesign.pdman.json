@@ -9,11 +9,12 @@
           "fields": [
             {
               "name": "USER_ID",
-              "type": "DefaultString",
+              "type": "Integer",
               "remark": "",
               "chnname": "用户id",
               "pk": true,
-              "notNull": true
+              "notNull": true,
+              "autoIncrement": true
             },
             {
               "name": "USER_EMAIL",
@@ -25,7 +26,7 @@
             },
             {
               "name": "USER_EMAIL_VERIFY",
-              "type": "DefaultString",
+              "type": "LongKey",
               "remark": "",
               "chnname": "是否验证邮箱"
             },
@@ -221,11 +222,12 @@
           "fields": [
             {
               "name": "RESOURSE_ID",
-              "type": "IdOrKey",
+              "type": "Integer",
               "remark": "",
               "chnname": "剪贴板条目ID",
               "pk": true,
-              "notNull": true
+              "notNull": true,
+              "autoIncrement": true
             },
             {
               "name": "CREATED_BY_UID",
@@ -864,6 +866,20 @@
         "deleteIndexTemplate": "",
         "createIndexTemplate": "",
         "updateTableComment": ""
+      }
+    ]
+  },
+  "profile": {
+    "dbs": [
+      {
+        "name": "我的",
+        "defaultDB": true,
+        "properties": {
+          "driver_class_name": "com.mysql.jdbc.Driver",
+          "url": "jdbc:mysql://localhost:3306/miniurl?characterEncoding=utf8&useSSL=true&serverTimezone=UTC&serverTimezone=GMT%2B8",
+          "password": "zxc0",
+          "username": "root"
+        }
       }
     ]
   }

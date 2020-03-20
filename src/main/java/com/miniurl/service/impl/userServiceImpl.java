@@ -16,22 +16,33 @@ public class userServiceImpl implements userService {
     private UserMapper userMapper;
 
     @Override
-    public boolean add(User user) {
+    public String add(User user) {
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         user.setHashPass(encoder.encode(user.getHashPass()));
-        if(userMapper.insert(user) == SUCCESS) return true;
-        else return false;
+        user.setUserEmailVerify(encoder.encode(user.getUserEmail()));
+        if(userMapper.insert(user) == SUCCESS)return user.getUserEmailVerify();
+        else return "0";
+        //这里发送邮件
     }
 
     @Override
-    public boolean verify(User user) {
+    public boolean confirm(User user) {
+        User temp=userMapper.selectByPrimaryKey(user);
+        if(temp==null) return false;
+        temp.setUserEmailVerify("1");
+        userMapper.updateByPrimaryKey(temp);
+        return true;
+    }
+
+    @Override
+    public String verify(User user) {
         User buffer=userMapper.selectByPrimaryKey(user);
-        if(buffer==null) return false;
+        if(buffer==null) return "该用户未注册";
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         if(encoder.matches(user.getHashPass(),buffer.getHashPass())){
-            return true;
+            return "注册成功";
         }
-        return false;
+        return "存在用户但验证失败";
     }
 
     @Override

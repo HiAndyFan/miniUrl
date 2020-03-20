@@ -10,7 +10,7 @@ public class User {
     @Id
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String userId;
+    private Integer userId;
 
     /**
      * 邮箱
@@ -65,7 +65,7 @@ public class User {
      *
      * @return USER_ID - 用户id
      */
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -74,7 +74,7 @@ public class User {
      *
      * @param userId 用户id
      */
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
