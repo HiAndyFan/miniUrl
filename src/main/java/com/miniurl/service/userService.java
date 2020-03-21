@@ -2,10 +2,11 @@ package com.miniurl.service;
 
 import com.miniurl.entity.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface userService {
-    String add(User user);
+    HashMap<String,String> add(User user);
     boolean confirm(User user);
     String verify(User user);
     boolean delete(User user);

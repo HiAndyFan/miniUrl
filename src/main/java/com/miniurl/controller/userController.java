@@ -1,12 +1,12 @@
 package com.miniurl.controller;
 
 import com.miniurl.entity.User;
-import com.miniurl.service.urlmapService;
 import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 @RestController
@@ -16,41 +16,45 @@ public class userController {
     @Autowired
     userService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @PostMapping("/register")
-    public CommonJson register(@RequestParam(name = "email") String email,
-                               @RequestParam(name = "username") String username,
-                               @RequestParam(name = "password") String password
+    public CommonJson register(
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "password") String password
     ){
-        User buffer=new User(){{
+        HashMap<String,String> s=userService.add(new User(){{
             setUserEmail(email);
             setUserName(username);
             setHashPass(password);//明文
             setUserEmailVerify("0");
-        }};
-        String s=userService.add(buffer);
-        if(s!="0"){
-            HashMap<String,String> msgbuffer=new HashMap<String,String>(){{
-                put("USER_EMAIL_VERIFY",s);
-                put("msg","注册成功");
-            }};
-            return CommonJson.success(msgbuffer);
+        }});
+        if(s.get("code")!="0"){
+            return CommonJson.success(new HashMap<String,String>(){{
+                put("VERIFY_URL","https://" + request.getServerName()+ ":"+
+                        request.getServerPort()+ request.getRequestURI().replace("/register","")+
+                        "/confirm"+"?userid="+s.get("userid")+
+                        "&check="+s.get("code"));
+                put("msg","注册成功，等待验证邮箱");
+            }});
         }else {
             return CommonJson.failure("注册失败");
         }
     }
 
-    @PostMapping("/confirm")
+    @GetMapping("/confirm")
             public CommonJson confirmEmail(@RequestParam(name = "userid") String userid,
             @RequestParam(name = "check") String check
     ){
-        User temp=new User(){{
+        if(userService.confirm(new User(){{
             setUserId(Integer.parseInt(userid));
             setUserEmailVerify(check);
-        }};
-        if(userService.confirm(temp)){
-            return CommonJson.success("注册成功");
+        }})){
+            return CommonJson.success("验证通过");
         }else {
-            return CommonJson.failure("注册失败");
+            return CommonJson.failure("验证失败");
         }
     }
 }

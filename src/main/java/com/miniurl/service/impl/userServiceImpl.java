@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 @Service
 public class userServiceImpl implements userService {
@@ -17,13 +18,19 @@ public class userServiceImpl implements userService {
     private UserMapper userMapper;
 
     @Override
-    public String add(User user) {
+    public HashMap<String,String> add(User user) {
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         user.setHashPass(encoder.encode(user.getHashPass()));
         user.setUserEmailVerify(encoder.encode(user.getUserEmail()).substring(32));//后32位
         user.setCreatedTime(new Date());
-        if(userMapper.insert(user) == SUCCESS)return user.getUserEmailVerify();
-        else return "0";
+        if(userMapper.insert(user) == SUCCESS)
+            return new HashMap<String,String>(){{
+                put("userid",user.getUserId().toString());
+                put("code",user.getUserEmailVerify());
+            }};
+        else return new HashMap<String,String>(){{
+            put("code","0");
+        }};
         //这里发送邮件
     }
 
