@@ -28,7 +28,6 @@ public class baseController {
     ){
         String UID="0";
         Urlmap temp=new Urlmap(){{
-            setResourseId(original_url);
             setOriginalUrl(original_url);
             setIdTtl(id_ttl);
             setRevision("0");
@@ -36,12 +35,12 @@ public class baseController {
             setCreatedTime(new Date());
             setUpdatedTime(new Date());
         }};
-
-        HashMap<String,String> buffer=new HashMap<String,String>(){{
-            put("resourse_id",resourse_id);
-            put("ttl",id_ttl.toString());
-        }};
-        if(urlmapService.add(temp)){
+        String resourse_idOut=urlmapService.add(temp);
+        if(resourse_idOut!="-1"){
+            HashMap<String,String> buffer=new HashMap<String,String>(){{
+                put("resourse_id",resourse_idOut);
+                put("ttl",id_ttl.toString());
+            }};
             return CommonJson.success(buffer);
         }
         return CommonJson.failure("申请失败");

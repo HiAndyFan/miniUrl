@@ -22,13 +22,15 @@
               "remark": "",
               "chnname": "邮箱",
               "pk": false,
-              "notNull": false
+              "notNull": true
             },
             {
               "name": "USER_EMAIL_VERIFY",
-              "type": "LongKey",
+              "type": "DefaultString",
               "remark": "",
-              "chnname": "是否验证邮箱"
+              "chnname": "是否验证邮箱",
+              "pk": false,
+              "notNull": true
             },
             {
               "name": "USER_NAME",
@@ -36,39 +38,38 @@
               "remark": "",
               "chnname": "用户名",
               "pk": false,
-              "notNull": false
+              "notNull": true
             },
             {
               "name": "HASH_PASS",
               "type": "ShortString",
               "remark": "",
-              "chnname": "密码"
+              "chnname": "密码",
+              "notNull": true,
+              "relationNoShow": false
             },
             {
               "name": "USER_CLASS",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "用户等级"
-            },
-            {
-              "name": "CREATED_BY",
-              "type": "IdOrKey",
-              "remark": "",
-              "chnname": "创建来源端",
-              "pk": false,
-              "notNull": false
+              "chnname": "用户等级",
+              "notNull": false,
+              "defaultValue": "1"
             },
             {
               "name": "CREATED_TIME",
               "type": "DateTime",
               "remark": "",
-              "chnname": "创建时间"
+              "chnname": "创建时间",
+              "notNull": true
             },
             {
               "name": "URL_NUM",
-              "type": "DefaultString",
+              "type": "Integer",
               "remark": "",
-              "chnname": "变短次数"
+              "chnname": "变短次数",
+              "notNull": false,
+              "defaultValue": "0"
             }
           ],
           "indexs": [],
@@ -135,37 +136,43 @@
               "name": "ORIGINAL_URL",
               "type": "MiddleString",
               "remark": "",
-              "chnname": "源链接"
+              "chnname": "源链接",
+              "notNull": true
             },
             {
               "name": "ID_TTL",
               "type": "Integer",
               "remark": "",
-              "chnname": "生存周期"
+              "chnname": "生存周期",
+              "notNull": true
             },
             {
               "name": "REVISION",
               "type": "YesNo",
               "remark": "",
-              "chnname": "乐观锁"
+              "chnname": "乐观锁",
+              "notNull": true
             },
             {
               "name": "CREATED_BY_UID",
               "type": "IdOrKey",
               "remark": "",
-              "chnname": "创建人UID"
+              "chnname": "创建人UID",
+              "notNull": true
             },
             {
               "name": "CREATED_TIME",
               "type": "DateTime",
               "remark": "",
-              "chnname": "创建时间"
+              "chnname": "创建时间",
+              "notNull": true
             },
             {
               "name": "UPDATED_TIME",
               "type": "DateTime",
               "remark": "",
-              "chnname": "更新时间"
+              "chnname": "更新时间",
+              "notNull": true
             }
           ],
           "indexs": [],

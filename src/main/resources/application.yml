@@ -3,15 +3,15 @@ server:
   servlet:
     context-path: /
 
-#  ssl:
-#    #SSL证书路径 一定要加上classpath:
-#    key-store: classpath:sendWater.jks
-#    #SSL证书密码
-#    key-store-password: UvFo0W0B
-#    #证书类型
-#    key-store-type: JKS
-#    #证书别名
-#    key-alias: alias
+  ssl:
+    #SSL证书路径 一定要加上classpath:
+    key-store: classpath:server.keystore
+    #SSL证书密码
+    key-store-password: 5460313319
+    #证书类型
+    key-store-type: JKS
+    #证书别名
+    key-alias: miniurl
 
 spring:
   datasource:

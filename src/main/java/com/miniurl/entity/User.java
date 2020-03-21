@@ -43,12 +43,6 @@ public class User {
     private String userClass;
 
     /**
-     * 创建来源端
-     */
-    @Column(name = "CREATED_BY")
-    private String createdBy;
-
-    /**
      * 创建时间
      */
     @Column(name = "CREATED_TIME")
@@ -58,7 +52,7 @@ public class User {
      * 变短次数
      */
     @Column(name = "URL_NUM")
-    private String urlNum;
+    private Integer urlNum;
 
     /**
      * 获取用户id
@@ -169,24 +163,6 @@ public class User {
     }
 
     /**
-     * 获取创建来源端
-     *
-     * @return CREATED_BY - 创建来源端
-     */
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * 设置创建来源端
-     *
-     * @param createdBy 创建来源端
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
      * 获取创建时间
      *
      * @return CREATED_TIME - 创建时间
@@ -209,7 +185,7 @@ public class User {
      *
      * @return URL_NUM - 变短次数
      */
-    public String getUrlNum() {
+    public Integer getUrlNum() {
         return urlNum;
     }
 
@@ -218,7 +194,7 @@ public class User {
      *
      * @param urlNum 变短次数
      */
-    public void setUrlNum(String urlNum) {
+    public void setUrlNum(Integer urlNum) {
         this.urlNum = urlNum;
     }
 }

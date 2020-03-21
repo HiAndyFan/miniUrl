@@ -7,6 +7,8 @@ import com.miniurl.utils.CommonJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/user")
 public class userController {
@@ -16,16 +18,22 @@ public class userController {
 
     @PostMapping("/register")
     public CommonJson register(@RequestParam(name = "email") String email,
+                               @RequestParam(name = "username") String username,
                                @RequestParam(name = "password") String password
     ){
         User buffer=new User(){{
             setUserEmail(email);
+            setUserName(username);
             setHashPass(password);//明文
             setUserEmailVerify("0");
         }};
         String s=userService.add(buffer);
         if(s!="0"){
-            return CommonJson.success(s);
+            HashMap<String,String> msgbuffer=new HashMap<String,String>(){{
+                put("USER_EMAIL_VERIFY",s);
+                put("msg","注册成功");
+            }};
+            return CommonJson.success(msgbuffer);
         }else {
             return CommonJson.failure("注册失败");
         }

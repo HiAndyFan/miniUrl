@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 @Service
 public class userServiceImpl implements userService {
@@ -19,7 +20,8 @@ public class userServiceImpl implements userService {
     public String add(User user) {
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         user.setHashPass(encoder.encode(user.getHashPass()));
-        user.setUserEmailVerify(encoder.encode(user.getUserEmail()));
+        user.setUserEmailVerify(encoder.encode(user.getUserEmail()).substring(32));//后32位
+        user.setCreatedTime(new Date());
         if(userMapper.insert(user) == SUCCESS)return user.getUserEmailVerify();
         else return "0";
         //这里发送邮件

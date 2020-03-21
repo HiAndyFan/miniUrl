@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-//@Configuration
+@Configuration
 public class HttpsConfig {
     @Value("${server.port}")
     private Integer port;
@@ -26,7 +26,7 @@ public class HttpsConfig {
                 SecurityConstraint constraint = new SecurityConstraint();
                 constraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
+                collection.addPattern("/user/*");
                 constraint.addCollection(collection);
                 context.addConstraint(constraint);
             }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import static com.miniurl.pojo.MiniUrlGenerate.MiniUrlGenerate;
 @Service
 public class urlmapServiceImpl implements urlmapService {
@@ -17,7 +16,7 @@ public class urlmapServiceImpl implements urlmapService {
     private UrlmapMapper urlmapMapper;
 
     @Override
-    public boolean add(Urlmap urlmap) {
+    public String add(Urlmap urlmap) {
         String id=MiniUrlGenerate();
         Urlmap temp=urlmapMapper.selectByPrimaryKey(id);
         while (temp!=null) {
@@ -25,8 +24,8 @@ public class urlmapServiceImpl implements urlmapService {
             temp = urlmapMapper.selectByPrimaryKey(id);
         }
         urlmap.setResourseId(id);
-        if(urlmapMapper.insert(urlmap) == SUCCESS) return true;
-        else return false;
+        if(urlmapMapper.insert(urlmap) == SUCCESS) return id;
+        else return "-1";
     }
 
     @Override
