@@ -41,8 +41,8 @@ public class urlmapServiceImpl implements urlmapService {
     }
 
     @Override
-    public Urlmap getByID(String id) {
-        return urlmapMapper.selectByPrimaryKey(id);
+    public Urlmap getByID(Urlmap urlmap) {
+        return urlmapMapper.selectByPrimaryKey(urlmap);
     }
 
     @Override

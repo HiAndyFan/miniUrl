@@ -7,6 +7,7 @@ import com.miniurl.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,16 +20,32 @@ public class userServiceImpl implements userService {
 
     @Override
     public HashMap<String,String> add(User user) {
+        // 创建Example
+        Example example = new Example(User.class);
+        // 创建Criteria
+        Example.Criteria criteria = example.createCriteria();
+        // 添加条件
+        criteria.andEqualTo("userEmail", user.getUserEmail());
+        if(!userMapper.selectByExample(example).isEmpty()){
+            return new HashMap<String,String>(){{
+                put("msg","该邮箱已注册");
+                put("code","1");
+            }};
+        }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         user.setHashPass(encoder.encode(user.getHashPass()));
         user.setUserEmailVerify(encoder.encode(user.getUserEmail()).substring(32));//后32位
         user.setCreatedTime(new Date());
+        user.setUrlNum(0);
+        user.setUserClass("1");
         if(userMapper.insert(user) == SUCCESS)
             return new HashMap<String,String>(){{
+                put("msg","创建成功");
                 put("userid",user.getUserId().toString());
                 put("code",user.getUserEmailVerify());
             }};
         else return new HashMap<String,String>(){{
+            put("msg","创建失败");
             put("code","0");
         }};
         //这里发送邮件

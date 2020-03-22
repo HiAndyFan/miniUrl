@@ -161,17 +161,17 @@
               "notNull": true
             },
             {
+              "name": "CREATED_BY_CLIENT",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "创建来源端",
+              "defaultValue": "unknow"
+            },
+            {
               "name": "CREATED_TIME",
               "type": "DateTime",
               "remark": "",
               "chnname": "创建时间",
-              "notNull": true
-            },
-            {
-              "name": "UPDATED_TIME",
-              "type": "DateTime",
-              "remark": "",
-              "chnname": "更新时间",
               "notNull": true
             }
           ],
@@ -347,12 +347,12 @@
             "id": "9561fa8a",
             "controlPoints": [
               {
-                "x": 459.669921875,
+                "x": 446.9990234375,
                 "y": 142.69117647058823
               },
               {
-                "x": 398.0322265625,
-                "y": 202.17857142857144
+                "x": 397.7822265625,
+                "y": 212.19736842105263
               }
             ],
             "sourceAnchor": 8,
@@ -370,8 +370,8 @@
                 "y": 302.4423076923077
               },
               {
-                "x": 398.0322265625,
-                "y": 202.17857142857144
+                "x": 397.7822265625,
+                "y": 212.19736842105263
               }
             ],
             "sourceAnchor": 2,

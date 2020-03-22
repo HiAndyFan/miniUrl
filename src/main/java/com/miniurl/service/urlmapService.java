@@ -8,6 +8,6 @@ public interface urlmapService {
     String add(Urlmap urlmap);
     boolean delete(Urlmap urlmap);
     boolean update(Urlmap urlmap);
-    Urlmap getByID(String id);
+    Urlmap getByID(Urlmap urlmap);
     List<Urlmap> getAllByPage(Integer currentPage, Integer pageSize);
 }

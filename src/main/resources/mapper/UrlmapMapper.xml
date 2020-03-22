@@ -11,6 +11,28 @@
     <result column="REVISION" jdbcType="VARCHAR" property="revision" />
     <result column="CREATED_BY_UID" jdbcType="VARCHAR" property="createdByUid" />
     <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RESOURSE_ID" jdbcType="VARCHAR" property="resourseId" />
+    <result column="ORIGINAL_URL" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="ID_TTL" jdbcType="INTEGER" property="idTtl" />
+    <result column="REVISION" jdbcType="VARCHAR" property="revision" />
+    <result column="CREATED_BY_UID" jdbcType="VARCHAR" property="createdByUid" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RESOURSE_ID" jdbcType="VARCHAR" property="resourseId" />
+    <result column="ORIGINAL_URL" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="ID_TTL" jdbcType="INTEGER" property="idTtl" />
+    <result column="REVISION" jdbcType="VARCHAR" property="revision" />
+    <result column="CREATED_BY_UID" jdbcType="VARCHAR" property="createdByUid" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.miniurl.entity.Urlmap">

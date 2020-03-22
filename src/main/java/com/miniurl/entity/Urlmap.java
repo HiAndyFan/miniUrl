@@ -43,12 +43,6 @@ public class Urlmap {
     private Date createdTime;
 
     /**
-     * 更新时间
-     */
-    @Column(name = "UPDATED_TIME")
-    private Date updatedTime;
-
-    /**
      * 获取短链接
      *
      * @return RESOURSE_ID - 短链接
@@ -154,23 +148,5 @@ public class Urlmap {
      */
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
-    }
-
-    /**
-     * 获取更新时间
-     *
-     * @return UPDATED_TIME - 更新时间
-     */
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    /**
-     * 设置更新时间
-     *
-     * @param updatedTime 更新时间
-     */
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
     }
 }
