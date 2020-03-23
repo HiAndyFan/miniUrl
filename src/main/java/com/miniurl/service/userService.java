@@ -12,5 +12,7 @@ public interface userService {
     boolean delete(User user);
     boolean update(User user);
     User getById(String user_id);
+    User getByEmail(String email);
+    boolean comparePassword(User user,User userInDB);
     List<User> getAllByPage(Integer currentPage, Integer pageSize);
 }

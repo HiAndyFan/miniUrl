@@ -37,6 +37,12 @@ public class Urlmap {
     private String createdByUid;
 
     /**
+     * 创建来源端
+     */
+    @Column(name = "CREATED_BY_CLIENT")
+    private String createdByClient;
+
+    /**
      * 创建时间
      */
     @Column(name = "CREATED_TIME")
@@ -130,6 +136,24 @@ public class Urlmap {
      */
     public void setCreatedByUid(String createdByUid) {
         this.createdByUid = createdByUid;
+    }
+
+    /**
+     * 获取创建来源端
+     *
+     * @return CREATED_BY_CLIENT - 创建来源端
+     */
+    public String getCreatedByClient() {
+        return createdByClient;
+    }
+
+    /**
+     * 设置创建来源端
+     *
+     * @param createdByClient 创建来源端
+     */
+    public void setCreatedByClient(String createdByClient) {
+        this.createdByClient = createdByClient;
     }
 
     /**

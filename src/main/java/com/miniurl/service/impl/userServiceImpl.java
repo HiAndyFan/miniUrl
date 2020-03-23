@@ -27,9 +27,9 @@ public class userServiceImpl implements userService {
         // 添加条件
         criteria.andEqualTo("userEmail", user.getUserEmail());
         if(!userMapper.selectByExample(example).isEmpty()){
-            return new HashMap<String,String>(){{
-                put("msg","该邮箱已注册");
-                put("code","1");
+            return new HashMap<>() {{
+                put("msg", "该邮箱已注册");
+                put("code", "1");
             }};
         }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
@@ -39,14 +39,14 @@ public class userServiceImpl implements userService {
         user.setUrlNum(0);
         user.setUserClass("1");
         if(userMapper.insert(user) == SUCCESS)
-            return new HashMap<String,String>(){{
-                put("msg","创建成功");
-                put("userid",user.getUserId().toString());
-                put("code",user.getUserEmailVerify());
+            return new HashMap<>() {{
+                put("msg", "创建成功");
+                put("userid", user.getUserId().toString());
+                put("code", user.getUserEmailVerify());
             }};
-        else return new HashMap<String,String>(){{
-            put("msg","创建失败");
-            put("code","0");
+        else return new HashMap<>() {{
+            put("msg", "创建失败");
+            put("code", "0");
         }};
         //这里发送邮件
     }
@@ -70,24 +70,38 @@ public class userServiceImpl implements userService {
         }
         return "存在用户但验证失败";
     }
-
+    @Override
+    public boolean comparePassword(User user,User userInDB){
+        BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
+        return encoder.matches(user.getHashPass(), userInDB.getHashPass());
+    }
     @Override
     public boolean delete(User user) {
-        if(userMapper.deleteByPrimaryKey(user) == SUCCESS)return true;
-        else return false;
+        return userMapper.deleteByPrimaryKey(user) == SUCCESS;
         //待完善
     }
 
     @Override
     public boolean update(User user) {
-        if(userMapper.updateByPrimaryKey(user) == SUCCESS)return true;
-        else return false;
+        return userMapper.updateByPrimaryKey(user) == SUCCESS;
         //待完善
     }
 
     @Override
     public User getById(String user_id) {
         return userMapper.selectByPrimaryKey(user_id);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userEmail", email);
+        List<User> buffer=userMapper.selectByExample(example);
+        if(buffer.isEmpty()){
+            return null;
+        }
+        return buffer.get(0);
     }
 
     @Override

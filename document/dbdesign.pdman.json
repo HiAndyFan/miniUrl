@@ -72,7 +72,15 @@
               "defaultValue": "0"
             }
           ],
-          "indexs": [],
+          "indexs": [
+            {
+              "name": "userInfo",
+              "isUnique": true,
+              "fields": [
+                "USER_EMAIL"
+              ]
+            }
+          ],
           "headers": [
             {
               "fieldName": "chnname",
@@ -165,7 +173,7 @@
               "type": "DefaultString",
               "remark": "",
               "chnname": "创建来源端",
-              "defaultValue": "unknow"
+              "defaultValue": ""
             },
             {
               "name": "CREATED_TIME",

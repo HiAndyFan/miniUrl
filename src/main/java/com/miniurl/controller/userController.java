@@ -1,12 +1,16 @@
 package com.miniurl.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.miniurl.entity.User;
+import com.miniurl.pojo.JWTTools;
 import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
+import com.miniurl.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -20,6 +24,9 @@ public class userController {
 
     @Autowired
     private HttpServletRequest request;
+
+    @Resource
+    private RedisUtils redisUtils;
 
     @PostMapping("/register")
     public CommonJson register(
@@ -67,6 +74,31 @@ public class userController {
             return CommonJson.success("验证通过");
         }else {
             return CommonJson.failure("验证失败");
+        }
+    }
+    @PostMapping("/login")
+    public CommonJson login(@RequestBody JSONObject jsonParam){
+        JWTTools jwtTools=new JWTTools();
+        User user=new User(){{
+            setUserEmail(jsonParam.getString("email"));
+            setHashPass(jsonParam.getString("password"));
+        }};
+        User userInDataBase = userService.getByEmail(jsonParam.getString("email"));
+        if (userInDataBase == null) {
+            return CommonJson.success(new HashMap<String,String>(){{
+                put("msg","该邮箱未注册");
+            }});
+        } else if (!userService.comparePassword(user, userInDataBase)) {
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","密码错误");
+            }});
+        } else {
+            String token = jwtTools.getToken(userInDataBase);
+            redisUtils.set(token,userInDataBase.getUserName(),7200);
+            return CommonJson.success(new HashMap<>(){{
+                put("username",userInDataBase.getUserName());
+                put("token",token);
+            }});
         }
     }
     /*

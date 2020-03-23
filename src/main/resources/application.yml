@@ -3,15 +3,15 @@ server:
   servlet:
     context-path: /
 
-  ssl:
-    #SSL证书路径 一定要加上classpath:
-    key-store: classpath:server.keystore
-    #SSL证书密码
-    key-store-password: 5460313319
-    #证书类型
-    key-store-type: JKS
-    #证书别名
-    key-alias: miniurl
+#  ssl:
+#    #SSL证书路径 一定要加上classpath:
+#    key-store: classpath:server.keystore
+#    #SSL证书密码
+#    key-store-password: 5460313319
+#    #证书类型
+#    key-store-type: JKS
+#    #证书别名
+#    key-alias: miniurl
 
 spring:
   datasource:
@@ -44,6 +44,27 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+    timeout: 1000s  # 数据库连接超时时间，2.0 中该参数的类型为Duration，这里在配置的时候需要指明单位
+    # 连接池配置，2.0中直接使用jedis或者lettuce配置连接池
+    jedis:
+      pool:
+        # 最大空闲连接数
+        max-idle: 500
+        # 最小空闲连接数
+        min-idle: 50
+        # 等待可用连接的最大时间，负数为不限制
+        max-wait: -1
+        # 最大活跃连接数，负数为不限制
+        max-active: -1
+  cache:
+    redis:
+      time-to-live: -1 #毫秒
 
 mybatis:
   configuration:

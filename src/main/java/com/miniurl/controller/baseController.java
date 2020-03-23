@@ -45,15 +45,14 @@ public class baseController {
         }};
         String resourse_idOut=urlmapService.add(temp);
         if(resourse_idOut!="-1"){
-            HashMap<String,String> buffer=new HashMap<String,String>(){{
+            return CommonJson.success(new HashMap<String,String>(){{
                 put("result_url","https://" + request.getServerName()+ ":"+
-                    request.getServerPort()+ request.getRequestURI().replace("/createURL","")+
-                    "/"+resourse_idOut
+                        request.getServerPort()+ request.getRequestURI().replace("/createURL","")+
+                        "/"+resourse_idOut
                 );
                 put("resourse_id",resourse_idOut);
                 put("ttl",id_ttl.toString());
-            }};
-            return CommonJson.success(buffer);
+            }});
         }
         return CommonJson.failure("申请失败");
     }
