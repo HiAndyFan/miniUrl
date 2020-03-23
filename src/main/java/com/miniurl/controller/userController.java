@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -29,19 +30,15 @@ public class userController {
     private RedisUtils redisUtils;
 
     @PostMapping("/register")
-    public CommonJson register(
-            @RequestParam(name = "username") String username,
-            @RequestParam(name = "email") String email,
-            @RequestParam(name = "password") String password
-    ){
+    public CommonJson register(@RequestBody JSONObject jsonParam){
         Pattern pattern = Pattern.compile("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
-        if (!pattern.matcher(email).matches()||password.length()<=5) {
+        if (!pattern.matcher(jsonParam.getString("email")).matches()||jsonParam.getString("password").length()<=5) {
             return CommonJson.failure("非法申请");
         }
         HashMap<String,String> s=userService.add(new User(){{
-            setUserEmail(email);
-            setUserName(username);
-            setHashPass(password);//明文
+            setUserEmail(jsonParam.getString("username"));
+            setUserName(jsonParam.getString("email"));
+            setHashPass(jsonParam.getString("password"));//明文
             setUserEmailVerify("0");
         }});
         if(s.get("code")!="0"){
@@ -51,11 +48,11 @@ public class userController {
                 }});
             }
             return CommonJson.success(new HashMap<String,String>(){{
-                put("VERIFY_URL","https://" + request.getServerName()+ ":"+
+                put("VERIFY_URL","http://" + request.getServerName()+ ":"+
                         request.getServerPort()+ request.getRequestURI().replace("/register","")+
                         "/confirm"+"?userid="+s.get("userid")+
                         "&check="+s.get("code"));
-                put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(email,"@"));
+                put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(jsonParam.getString("email"),"@"));
                 put("msg","注册成功，等待验证邮箱");
             }});
         }else {
@@ -64,7 +61,8 @@ public class userController {
     }
 
     @GetMapping("/confirm")
-    public CommonJson confirmEmail(@RequestParam(name = "userid") String userid,
+    public CommonJson confirmEmail(
+            @RequestParam(name = "userid") String userid,
             @RequestParam(name = "check") String check
     ){
         if(userService.confirm(new User(){{
@@ -94,16 +92,40 @@ public class userController {
             }});
         } else {
             String token = jwtTools.getToken(userInDataBase);
-            redisUtils.set(token,userInDataBase.getUserName(),7200);
+            redisUtils.set(token,userInDataBase.getUserId(),7200);
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());
                 put("token",token);
             }});
         }
     }
-    /*
     @GetMapping("/getinfo")
-    public CommonJson getinfo(){
-
-    }*/
+    public CommonJson getInfo(@RequestBody JSONObject jsonParam){
+        String token=jsonParam.getString("token");
+        if(!redisUtils.hasKey(token)){
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","用户未登录或登录超时");
+            }});
+        }
+        redisUtils.expire(token, 7200);
+        User userInDB=userService.getById(redisUtils.get(token).toString());
+        if(userInDB==null){
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","系统错误");//有token但是没有注册
+            }});
+        }else if(!userInDB.getUserEmailVerify().equals("1")){
+            return CommonJson.success(new HashMap<>(){{
+                put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
+                put("msg","未验证邮箱");
+            }});
+        }
+        return CommonJson.success(new HashMap<>(){{
+            put("userid",userInDB.getUserId());
+            put("email",userInDB.getUserEmail());
+            put("username",userInDB.getUserName());
+            put("userclass",userInDB.getUserClass());
+            put("createTime",new SimpleDateFormat("yyyy-MM-dd").format(userInDB.getCreatedTime()));
+            put("urlnum",userInDB.getUrlNum());
+        }});
+    }
 }
