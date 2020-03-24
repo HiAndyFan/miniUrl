@@ -1,6 +1,7 @@
 package com.miniurl.service.impl;
 
 import com.miniurl.entity.Urlmap;
+import com.miniurl.entity.User;
 import com.miniurl.mapper.UrlmapMapper;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.PageBean;
@@ -30,14 +31,12 @@ public class urlmapServiceImpl implements urlmapService {
 
     @Override
     public boolean delete(Urlmap urlmap) {
-        if(urlmapMapper.deleteByPrimaryKey(urlmap) ==  SUCCESS) return true;
-        else return false;
+        return urlmapMapper.deleteByPrimaryKey(urlmap) == SUCCESS;
     }
 
     @Override
     public boolean update(Urlmap urlmap) {
-        if(urlmapMapper.updateByPrimaryKey(urlmap) ==  SUCCESS) return true;
-        else return false;
+        return urlmapMapper.updateByPrimaryKey(urlmap) == SUCCESS;
     }
 
     @Override
@@ -54,4 +53,14 @@ public class urlmapServiceImpl implements urlmapService {
         return page.getItems();
     }
 
+    @Override
+    public List<Urlmap> getByPage(User user, Integer currentPage, Integer pageSize){
+        List<Urlmap> urlmaps = urlmapMapper.select(new Urlmap(){{
+            setCreatedByUid(user.getUserId().toString());
+        }});
+        Integer countNums = urlmapMapper.selectCount(new Urlmap());
+        PageBean<Urlmap> page = new PageBean<>(currentPage,pageSize,countNums);
+        page.setItems(urlmaps);
+        return page.getItems();
+    }
 }

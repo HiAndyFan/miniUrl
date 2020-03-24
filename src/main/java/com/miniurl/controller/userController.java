@@ -3,6 +3,7 @@ package com.miniurl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.miniurl.entity.User;
 import com.miniurl.pojo.JWTTools;
+import com.miniurl.service.urlmapService;
 import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
@@ -19,13 +20,12 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/user")
 public class userController {
-
     @Autowired
     userService userService;
-
+    @Autowired
+    urlmapService urlmapService;
     @Autowired
     private HttpServletRequest request;
-
     @Resource
     private RedisUtils redisUtils;
 
@@ -107,7 +107,6 @@ public class userController {
                 put("msg","用户未登录或登录超时");
             }});
         }
-        redisUtils.expire(token, 7200);
         User userInDB=userService.getById(redisUtils.get(token).toString());
         if(userInDB==null){
             return CommonJson.success(new HashMap<>(){{
@@ -119,6 +118,7 @@ public class userController {
                 put("msg","未验证邮箱");
             }});
         }
+        redisUtils.expire(token, 7200);
         return CommonJson.success(new HashMap<>(){{
             put("userid",userInDB.getUserId());
             put("email",userInDB.getUserEmail());
@@ -127,5 +127,19 @@ public class userController {
             put("createTime",new SimpleDateFormat("yyyy-MM-dd").format(userInDB.getCreatedTime()));
             put("urlnum",userInDB.getUrlNum());
         }});
+    }
+
+    @GetMapping("/geturlrecord")
+    public CommonJson getUrlRecord(
+            @RequestParam(name = "token")String token,
+            @RequestParam(name = "currentPage",defaultValue = "1")Integer currentPage,
+            @RequestParam(name ="pageSize",defaultValue = "10")Integer pageSize){
+        if(!redisUtils.hasKey(token)){
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","用户未登录或登录超时");
+            }});
+        }
+        User userInDB=userService.getById(redisUtils.get(token).toString());
+        return CommonJson.success(urlmapService.getByPage(userInDB,currentPage,pageSize));
     }
 }

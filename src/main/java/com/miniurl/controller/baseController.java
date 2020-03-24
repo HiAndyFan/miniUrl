@@ -2,13 +2,18 @@ package com.miniurl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.miniurl.entity.Urlmap;
+import com.miniurl.entity.User;
 import com.miniurl.service.urlmapService;
+import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
+import com.miniurl.utils.RedisUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,30 +29,54 @@ public class baseController {
     private urlmapService urlmapService;
     @Autowired
     private HttpServletRequest request;
+    @Resource
+    private RedisUtils redisUtils;
+    @Autowired
+    com.miniurl.service.userService userService;
     @PostMapping("/createURL")
     public CommonJson createURL(
-            @RequestParam(name = "session",defaultValue = "0") String session,
+            @RequestParam(name = "token",defaultValue = "0") String token,
             @RequestParam(name = "original_url") String original_url,
             @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,
             @RequestParam(name = "id_ttl",defaultValue = "0") Integer id_ttl
     ){
-        String UID="0";//待优化
+        String UID="0";
+        if(token!="0"&&!redisUtils.hasKey(token)){
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","用户未登录或登录超时");
+            }});
+        }else {
+            User userInDB=userService.getById(redisUtils.get(token).toString());
+            if(userInDB==null){
+                return CommonJson.success(new HashMap<>(){{
+                    put("msg","系统错误");//有token但是没有注册
+                }});
+            }else if(!userInDB.getUserEmailVerify().equals("1")){
+                return CommonJson.success(new HashMap<>(){{
+                    put("urlToLoginEmail", "http://mail."+ StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
+                    put("msg","未验证邮箱");
+                }});
+            }
+            redisUtils.expire(token, 7200);
+            UID=userInDB.getUserId().toString();
+        }
         String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\/])+(\\?{0,1}(([A-Za-z0-9-~]+\\={0,1})([A-Za-z0-9-~]*)\\&{0,1})*)$";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(original_url).matches()&&original_url=="") {
             return CommonJson.failure("非法地址");
         }
+        String finalUID = UID;
         Urlmap temp=new Urlmap(){{
             setOriginalUrl(original_url);
             setIdTtl(id_ttl);
             setRevision("0");
-            setCreatedByUid(UID);
+            setCreatedByUid(finalUID);
             setCreatedTime(new Date());
         }};
         String resourse_idOut=urlmapService.add(temp);
         if(resourse_idOut!="-1"){
             return CommonJson.success(new HashMap<String,String>(){{
-                put("result_url","https://" + request.getServerName()+ ":"+
+                put("result_url","http://" + request.getServerName()+ ":"+
                         request.getServerPort()+ request.getRequestURI().replace("/createURL","")+
                         "/"+resourse_idOut
                 );

@@ -1,5 +1,6 @@
 package com.miniurl.service.impl;
 
+import com.miniurl.entity.Urlmap;
 import com.miniurl.entity.User;
 import com.miniurl.mapper.UserMapper;
 import com.miniurl.service.userService;

@@ -64,6 +64,12 @@
               "notNull": true
             },
             {
+              "name": "LAST_LOGIN_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "上次登录时间"
+            },
+            {
               "name": "URL_NUM",
               "type": "Integer",
               "remark": "",
