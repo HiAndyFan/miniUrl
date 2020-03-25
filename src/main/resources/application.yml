@@ -65,7 +65,16 @@ spring:
   cache:
     redis:
       time-to-live: -1 #毫秒
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true #开启驼峰命名
+
+#要扫描的包记录日志信息
+#s定义记录某个包内日志的级别，高于等于则记录，可以多个logging.level.org.springframework=FATAL
+logging:
+  config: classpath:log4j2.xml

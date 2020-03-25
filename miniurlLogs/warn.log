@@ -1,0 +1,1 @@
+[22:51:00:653] [WARN] - org.mybatis.logging.Logger.warn(Logger.java:44) - No MyBatis mapper was found in '[com.miniurl]' package. Please check your configuration.
