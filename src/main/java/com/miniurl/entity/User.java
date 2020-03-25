@@ -49,6 +49,12 @@ public class User {
     private Date createdTime;
 
     /**
+     * 上次登录时间
+     */
+    @Column(name = "LAST_LOGIN_TIME")
+    private Date lastLoginTime;
+
+    /**
      * 变短次数
      */
     @Column(name = "URL_NUM")
@@ -178,6 +184,24 @@ public class User {
      */
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    /**
+     * 获取上次登录时间
+     *
+     * @return LAST_LOGIN_TIME - 上次登录时间
+     */
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    /**
+     * 设置上次登录时间
+     *
+     * @param lastLoginTime 上次登录时间
+     */
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     /**

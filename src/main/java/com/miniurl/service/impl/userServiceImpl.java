@@ -113,4 +113,10 @@ public class userServiceImpl implements userService {
         page.setItems(users);
         return page.getItems();
     }
+
+    @Override
+    public void updateLoginTime(User user){
+        User userInDB=userMapper.selectByPrimaryKey(user);
+        userInDB.setLastLoginTime(new Date());
+    }
 }

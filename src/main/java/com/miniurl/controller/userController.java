@@ -92,6 +92,7 @@ public class userController {
             }});
         } else {
             String token = jwtTools.getToken(userInDataBase);
+            userService.updateLoginTime(userInDataBase);
             redisUtils.set(token,userInDataBase.getUserId(),7200);
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());

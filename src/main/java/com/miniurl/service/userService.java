@@ -13,6 +13,7 @@ public interface userService {
     boolean update(User user);
     User getById(String user_id);
     User getByEmail(String email);
+    void updateLoginTime(User user);
     boolean comparePassword(User user,User userInDB);
     List<User> getAllByPage(Integer currentPage, Integer pageSize);
 }
