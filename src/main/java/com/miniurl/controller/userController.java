@@ -27,8 +27,6 @@ public class userController {
     userService userService;
     @Autowired
     urlmapService urlmapService;
-    @Autowired
-    private HttpServletRequest request;
     @Resource
     private RedisUtils redisUtils;
     @Resource
@@ -75,8 +73,8 @@ public class userController {
             return CommonJson.failure("非法申请");
         }
         HashMap<String,String> s=userService.add(new User(){{
-            setUserEmail(jsonParam.getString("username"));
-            setUserName(jsonParam.getString("email"));
+            setUserEmail(jsonParam.getString("email"));
+            setUserName(jsonParam.getString("username"));
             setHashPass(jsonParam.getString("password"));//明文
             setUserEmailVerify("0");
         }});
@@ -132,7 +130,7 @@ public class userController {
         } else {
             String token = jwtTools.getToken(userInDataBase);
             userService.updateLoginTime(userInDataBase);
-            redisUtils.set(token,userInDataBase.getUserId(),7200);
+            redisUtils.set("token:"+token,userInDataBase.getUserId(),7200);
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());
                 put("token",token);
@@ -142,12 +140,12 @@ public class userController {
     @GetMapping("/getinfo")
     public CommonJson getInfo(@RequestBody JSONObject jsonParam){
         String token=jsonParam.getString("token");
-        if(!redisUtils.hasKey(token)){
+        if(!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
             }});
         }
-        User userInDB=userService.getById(redisUtils.get(token).toString());
+        User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
         if(userInDB==null){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","系统错误");//有token但是没有注册
@@ -158,7 +156,7 @@ public class userController {
                 put("msg","未验证邮箱");
             }});
         }
-        redisUtils.expire(token, 7200);
+        redisUtils.expire("token:"+token, 7200);
         return CommonJson.success(new HashMap<>(){{
             put("userid",userInDB.getUserId());
             put("email",userInDB.getUserEmail());
@@ -174,12 +172,12 @@ public class userController {
             @RequestParam(name = "token")String token,
             @RequestParam(name = "currentPage",defaultValue = "1")Integer currentPage,
             @RequestParam(name ="pageSize",defaultValue = "10")Integer pageSize){
-        if(!redisUtils.hasKey(token)){
+        if(!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
             }});
         }
-        User userInDB=userService.getById(redisUtils.get(token).toString());
+        User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
         return CommonJson.success(urlmapService.getByPage(userInDB,currentPage,pageSize));
     }
 }

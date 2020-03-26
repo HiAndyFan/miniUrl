@@ -5,7 +5,7 @@ server:
     session:
       cookie:
         name: miniurl
-      #  ssl:
+#  ssl:
 #    #SSL证书路径 一定要加上classpath:
 #    key-store: classpath:server.keystore
 #    #SSL证书密码
@@ -71,6 +71,7 @@ spring:
     view:
       prefix: classpath:/templates/
       suffix: .html
+
 
 mybatis:
   configuration:

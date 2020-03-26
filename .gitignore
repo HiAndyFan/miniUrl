@@ -2,7 +2,7 @@ HELP.md
 target/*
 src/main/resources/static/**
 src/main/resources/templates/**
-miniurlLogs/*
+/miniurlLogs/
 !target/miniurl-1.jar
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**

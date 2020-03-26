@@ -2,6 +2,7 @@ package com.miniurl.controller;
 
 import com.miniurl.entity.Urlmap;
 import com.miniurl.entity.User;
+import com.miniurl.utils.RequestLimit;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
@@ -26,8 +27,10 @@ public class baseController {
     private RedisUtils redisUtils;
     @Autowired
     com.miniurl.service.userService userService;
+    @RequestLimit(count=10,time=1800)//半个小时
     @PostMapping("/createURL")
     public CommonJson createURL(
+            HttpServletRequest request,
             @RequestParam(name = "token",defaultValue = "0") String token,
             @RequestParam(name = "original_url") String original_url,
             @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,
@@ -35,12 +38,12 @@ public class baseController {
             @RequestParam(name = "client",defaultValue = "web") String client
     ){
         String UID="0";
-        if(!token.equals("0")&&!redisUtils.hasKey(token)){
+        if(!token.equals("0")&&!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
             }});
         }else if (!token.equals("0")) {
-            User userInDB=userService.getById(redisUtils.get(token).toString());
+            User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
             if(userInDB==null){
                 return CommonJson.success(new HashMap<>(){{
                     put("msg","系统错误");//有token但是没有注册
@@ -51,7 +54,7 @@ public class baseController {
                     put("msg","未验证邮箱");
                 }});
             }
-            redisUtils.expire(token, 7200);
+            redisUtils.expire("token:"+token, 7200);
             UID=userInDB.getUserId().toString();
         }
         String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\/])+(\\?{0,1}(([A-Za-z0-9-~]+\\={0,1})([A-Za-z0-9-~]*)\\&{0,1})*)$";
