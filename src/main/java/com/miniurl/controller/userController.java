@@ -1,18 +1,21 @@
 package com.miniurl.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.miniurl.entity.User;
 import com.miniurl.pojo.JWTTools;
 import com.miniurl.service.urlmapService;
 import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
+import com.miniurl.utils.kaptchaUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -28,9 +31,45 @@ public class userController {
     private HttpServletRequest request;
     @Resource
     private RedisUtils redisUtils;
+    @Resource
+    private DefaultKaptcha captchaProducer;
+    @GetMapping(value = {"/register/regvalidatecode"})
+    public void loginValidateCode(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        kaptchaUtil.validateCode(request,response,captchaProducer,"register_validate_code");
+    }/*
+    @RequestMapping("/checkLoginValidateCode")
+    @ResponseBody
+    public HashMap checkLoginValidateCode(HttpServletRequest request,@RequestParam("validateCode")String validateCode) {
+        String loginValidateCode = request.getSession().getAttribute("register_validate_code").toString();
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        if(loginValidateCode == null){
+            map.put("status",null);//验证码过期
+        }else if(loginValidateCode.equals(validateCode)){
+            map.put("status",true);//验证码正确
+        }else if(!loginValidateCode.equals(validateCode)){
+            map.put("status",false);//验证码不正确
+        }
+        map.put("code",200);
+        return map;
+    }*/
 
     @PostMapping("/register")
-    public CommonJson register(@RequestBody JSONObject jsonParam){
+    public CommonJson register(HttpServletRequest request,@RequestBody JSONObject jsonParam){
+        String validateCode=jsonParam.getString("validateCode");
+        String cookieValidateCode = request.getSession().getAttribute("register_validate_code").toString();
+        if(cookieValidateCode == null){
+            //验证码过期
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","验证码过期");
+            }});
+        }else if(!cookieValidateCode.equals(validateCode)||validateCode.isEmpty()){
+            //验证码不正确
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","验证码不正确");
+            }});
+        }else if(cookieValidateCode.equals(validateCode)){
+            //验证码正确
+        }
         Pattern pattern = Pattern.compile("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
         if (!pattern.matcher(jsonParam.getString("email")).matches()||jsonParam.getString("password").length()<=5) {
             return CommonJson.failure("非法申请");

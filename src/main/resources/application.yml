@@ -2,8 +2,10 @@ server:
   port: 23333
   servlet:
     context-path: /
-
-#  ssl:
+    session:
+      cookie:
+        name: miniurl
+      #  ssl:
 #    #SSL证书路径 一定要加上classpath:
 #    key-store: classpath:server.keystore
 #    #SSL证书密码
@@ -78,3 +80,20 @@ mybatis:
 #s定义记录某个包内日志的级别，高于等于则记录，可以多个logging.level.org.springframework=FATAL
 logging:
   config: classpath:log4j2.xml
+
+kaptcha:
+  #	是否有边框，默认为yes，可选yes、no
+  border: "no"
+  #border.color: 105,179,90#边框颜色
+  textproducer:
+    font:
+      color: blue			#	验证码字体颜色
+      size: 30				# 文本字符大小
+      names: 宋体,楷体,微软雅黑			#文本字体样式
+    char:
+      length: 4			#验证码文本字符长度
+  image:
+    width: 120			# 图片宽度
+    height: 40			# 图片高度
+  session:
+    key: code			# 存储session key
