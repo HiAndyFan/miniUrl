@@ -9,7 +9,10 @@ import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
 import com.miniurl.utils.kaptchaUtil;
+import com.miniurl.utils.mail.MailVo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +34,7 @@ public class userController {
     private RedisUtils redisUtils;
     @Resource
     private DefaultKaptcha captchaProducer;
+    private static final Logger logger = LoggerFactory.getLogger("userController");
     @GetMapping(value = {"/register/regvalidatecode"})
     public void loginValidateCode(HttpServletRequest request, HttpServletResponse response) throws Exception{
         kaptchaUtil.validateCode(request,response,captchaProducer,"register_validate_code");
@@ -59,18 +63,23 @@ public class userController {
             //验证码过期
             return CommonJson.success(new HashMap<>(){{
                 put("msg","验证码过期");
+                put("code","201");
             }});
         }else if(!cookieValidateCode.equals(validateCode)||validateCode.isEmpty()){
             //验证码不正确
             return CommonJson.success(new HashMap<>(){{
                 put("msg","验证码不正确");
+                put("code","202");
             }});
         }else if(cookieValidateCode.equals(validateCode)){
             //验证码正确
         }
         Pattern pattern = Pattern.compile("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
         if (!pattern.matcher(jsonParam.getString("email")).matches()||jsonParam.getString("password").length()<=5) {
-            return CommonJson.failure("非法申请");
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","邮箱格式错误");
+                put("code","203");
+            }});
         }
         HashMap<String,String> s=userService.add(new User(){{
             setUserEmail(jsonParam.getString("email"));
@@ -82,8 +91,10 @@ public class userController {
             if(s.get("code")=="1"){
                 return CommonJson.success(new HashMap<String,String>(){{
                     put("msg","注册失败，邮箱已注册");
+                    put("code","204");
                 }});
             }
+            //这里发送邮件
             return CommonJson.success(new HashMap<String,String>(){{
                 put("VERIFY_URL","http://" + request.getServerName()+ ":"+
                         request.getServerPort()+ request.getRequestURI().replace("/register","")+
@@ -91,9 +102,12 @@ public class userController {
                         "&check="+s.get("code"));
                 put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(jsonParam.getString("email"),"@"));
                 put("msg","注册成功，等待验证邮箱");
+                put("code","205");
             }});
         }else {
-            return CommonJson.failure("注册失败");
+            return CommonJson.success(new HashMap<>(){{
+                put("code","206");
+            }});
         }
     }
 
@@ -106,9 +120,9 @@ public class userController {
             setUserId(Integer.parseInt(userid));
             setUserEmailVerify(check);
         }})){
-            return CommonJson.success("验证通过");
+            return CommonJson.success("验证通过");//待优化
         }else {
-            return CommonJson.failure("验证失败");
+            return CommonJson.success("验证失败");
         }
     }
     @PostMapping("/login")
@@ -122,10 +136,12 @@ public class userController {
         if (userInDataBase == null) {
             return CommonJson.success(new HashMap<String,String>(){{
                 put("msg","该邮箱未注册");
+                put("code","207");
             }});
         } else if (!userService.comparePassword(user, userInDataBase)) {
             return CommonJson.success(new HashMap<>(){{
                 put("msg","密码错误");
+                put("code","208");
             }});
         } else {
             String token = jwtTools.getToken(userInDataBase);
@@ -134,6 +150,7 @@ public class userController {
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());
                 put("token",token);
+                put("code","209");
             }});
         }
     }
@@ -143,10 +160,12 @@ public class userController {
         if(!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
+                put("code","210");
             }});
         }
         User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
         if(userInDB==null){
+            logger.warn("/getinfo有token但是没有注册");
             return CommonJson.success(new HashMap<>(){{
                 put("msg","系统错误");//有token但是没有注册
             }});
@@ -154,6 +173,7 @@ public class userController {
             return CommonJson.success(new HashMap<>(){{
                 put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
                 put("msg","未验证邮箱");
+                put("code","205");
             }});
         }
         redisUtils.expire("token:"+token, 7200);
@@ -175,6 +195,7 @@ public class userController {
         if(!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
+                put("code","210");
             }});
         }
         User userInDB=userService.getById(redisUtils.get("token:"+token).toString());

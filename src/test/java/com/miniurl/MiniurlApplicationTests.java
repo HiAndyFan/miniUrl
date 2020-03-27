@@ -1,7 +1,5 @@
 package com.miniurl;
 
-import com.miniurl.entity.Urlmap;
-import com.miniurl.entity.User;
 import com.miniurl.mapper.UrlmapMapper;
 import com.miniurl.mapper.UserMapper;
 import com.miniurl.utils.RedisUtils;
@@ -9,10 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 
 import static com.miniurl.pojo.MiniUrlGenerate.MiniUrlGenerate;
 
@@ -47,7 +43,8 @@ class MiniurlApplicationTests {
     void test1(){
         //Urlmap urlmap=new Urlmap(){{setResourseId("twxgf");}};
         //System.out.println(urlmapMapper.selectByPrimaryKey(urlmap).getOriginalUrl());
-        redisUtils.set("token:haha","????",7200);
-        System.out.println(redisUtils.get("token:haha").toString());
+        //redisUtils.set("token:haha","????",7200);
+        //System.out.println(redisUtils.get("token:haha").toString());
     }
+
 }

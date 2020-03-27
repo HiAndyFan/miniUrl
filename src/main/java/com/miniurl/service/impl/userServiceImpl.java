@@ -5,6 +5,7 @@ import com.miniurl.entity.User;
 import com.miniurl.mapper.UserMapper;
 import com.miniurl.service.userService;
 import com.miniurl.utils.PageBean;
+import com.miniurl.utils.mail.MailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class userServiceImpl implements userService {
         if(!userMapper.selectByExample(example).isEmpty()){
             return new HashMap<>() {{
                 put("msg", "该邮箱已注册");
-                put("code", "1");
+                put("code", "201");
             }};
         }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
@@ -39,17 +40,17 @@ public class userServiceImpl implements userService {
         user.setCreatedTime(new Date());
         user.setUrlNum(0);
         user.setUserClass("1");
-        if(userMapper.insert(user) == SUCCESS)
+        if(userMapper.insert(user) == SUCCESS) {
             return new HashMap<>() {{
                 put("msg", "创建成功");
                 put("userid", user.getUserId().toString());
                 put("code", user.getUserEmailVerify());
             }};
-        else return new HashMap<>() {{
+        }else return new HashMap<>() {{
             put("msg", "创建失败");
             put("code", "0");
         }};
-        //这里发送邮件
+
     }
 
     @Override
@@ -79,13 +80,11 @@ public class userServiceImpl implements userService {
     @Override
     public boolean delete(User user) {
         return userMapper.deleteByPrimaryKey(user) == SUCCESS;
-        //待完善
     }
 
     @Override
     public boolean update(User user) {
         return userMapper.updateByPrimaryKey(user) == SUCCESS;
-        //待完善
     }
 
     @Override

@@ -40,18 +40,21 @@ public class baseController {
         String UID="0";
         if(!token.equals("0")&&!redisUtils.hasKey("token:"+token)){
             return CommonJson.success(new HashMap<>(){{
-                put("msg","用户未登录或登录超时");
+                //put("msg","用户未登录或登录超时");
+                put("code","101");
             }});
         }else if (!token.equals("0")) {
             User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
             if(userInDB==null){
                 return CommonJson.success(new HashMap<>(){{
-                    put("msg","系统错误");//有token但是没有注册
+                    //put("msg","系统错误");//有token但是没有注册
+                    put("code","102");
                 }});
             }else if(!userInDB.getUserEmailVerify().equals("1")){
                 return CommonJson.success(new HashMap<>(){{
                     put("urlToLoginEmail", "http://mail."+ StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
                     put("msg","未验证邮箱");
+                    put("code","103");
                 }});
             }
             redisUtils.expire("token:"+token, 7200);
@@ -60,7 +63,10 @@ public class baseController {
         String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\/])+(\\?{0,1}(([A-Za-z0-9-~]+\\={0,1})([A-Za-z0-9-~]*)\\&{0,1})*)$";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(original_url).matches()&& original_url.equals("")) {
-            return CommonJson.failure("非法地址");
+            return CommonJson.success(new HashMap<>(){{
+                put("msg","非法地址");
+                put("code","104");
+            }});
         }
         String finalUID = UID;
         Urlmap temp=new Urlmap(){{
@@ -80,9 +86,10 @@ public class baseController {
                 );
                 put("resourse_id",resourse_idOut);
                 put("ttl",id_ttl.toString());
+                put("code","105");
             }});
         }
-        return CommonJson.failure("申请失败");
+        return CommonJson.success("申请失败");
     }
     @GetMapping("/{id}")
     public void redirect(HttpServletResponse response, @PathVariable String id) throws IOException {

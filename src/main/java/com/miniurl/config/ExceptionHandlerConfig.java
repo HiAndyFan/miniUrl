@@ -11,7 +11,7 @@ public class ExceptionHandlerConfig {
     private static final Logger logger = LoggerFactory.getLogger("ExceptionHandlerConfig");
     @ExceptionHandler(value =java.sql.SQLSyntaxErrorException.class)
     public CommonJson exceptionHandler(RuntimeException  e){
-        logger.warn("数据库错误："+e);
+        logger.warn("数据库错误：\n"+e);
         return CommonJson.success("致命错误");
     }
 }
