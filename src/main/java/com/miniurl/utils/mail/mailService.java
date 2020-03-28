@@ -91,4 +91,5 @@ public class mailService {
     public String getMailSendFrom() {
         return mailSender.getJavaMailProperties().getProperty("from");
     }
+
 }

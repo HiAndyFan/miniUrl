@@ -35,7 +35,8 @@ public class RequestLimitContract {
             if (request == null) {
                 throw new RequestLimitException("方法中缺失HttpServletRequest参数");
             }
-            String ip = request.getLocalAddr();
+            String ip = request.getHeader("X-Real-IP");
+            //String ip = request.getLocalAddr();
             String url = request.getRequestURL().toString();
             String key = "req_limit_".concat(url).concat(ip);
             if (redisUtils.get(key) == null || redisUtils.get(key).equals("0")) {

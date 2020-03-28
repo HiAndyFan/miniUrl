@@ -34,7 +34,7 @@ public class baseController {
             @RequestParam(name = "token",defaultValue = "0") String token,
             @RequestParam(name = "original_url") String original_url,
             @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,
-            @RequestParam(name = "id_ttl",defaultValue = "0") Integer id_ttl,
+            @RequestParam(name = "id_ttl",defaultValue = "7") Integer id_ttl,
             @RequestParam(name = "client",defaultValue = "web") String client
     ){
         String UID="0";
@@ -80,8 +80,7 @@ public class baseController {
         String resourse_idOut=urlmapService.add(temp);
         if(!resourse_idOut.equals("-1")){
             return CommonJson.success(new HashMap<String,String>(){{
-                put("result_url","http://" + request.getServerName()+ ":"+
-                        request.getServerPort()+ request.getRequestURI().replace("/createURL","")+
+                put("result_url","http://" + request.getServerName()+request.getRequestURI().replace("/createURL","")+
                         "/"+resourse_idOut
                 );
                 put("resourse_id",resourse_idOut);

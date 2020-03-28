@@ -1,5 +1,5 @@
 server:
-  port: 23333
+  port: 51857
   servlet:
     context-path: /
     session:
@@ -18,7 +18,7 @@ server:
 spring:
   datasource:
     #   数据源基本配置
-    username: root
+    username: tomcat
     password: zxc0
     url: jdbc:mysql://localhost:3306/miniurl?characterEncoding=utf8&useSSL=true&serverTimezone=UTC&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -46,25 +46,26 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-#  mail:
-#    host: smtp.163.com #SMTP服务器地址
-#    username:  zeqide@163.com #登陆账号
-#    password: PHZYZULFTZBCAMGJ #登陆密码（或授权码）
-#    #PHZYZULFTZBCAMGJ 邮箱
-#    properties:
-#      from: zeqide@163.com #邮件发信人（即真实邮箱）
-#    thymeleaf:
-#      cache: false
-#      prefix: classpath:/views/
+  mail:
+    host: smtp.163.com #SMTP服务器地址
+    username:  zeqide@163.com #登陆账号
+    password: #PHZYZULFTZBCAMGJ #登陆密码（或授权码）
+    #PHZYZULFTZBCAMGJ 邮箱
+    properties:
+      from: zeqide@163.com #邮件发信人（即真实邮箱）
+    thymeleaf:
+      cache: false
+      prefix: classpath:/views/
     servlet:
       multipart:
         max-file-size: 10MB #限制单个文件大小
         max-request-size: 50MB #限制请求总量
 
+
   redis:
     host: localhost
     port: 6379
-    password:
+    password: zxc0
     database: 0
     timeout: 1000s  # 数据库连接超时时间，2.0 中该参数的类型为Duration，这里在配置的时候需要指明单位
     # 连接池配置，2.0中直接使用jedis或者lettuce配置连接池
@@ -81,10 +82,10 @@ spring:
   cache:
     redis:
       time-to-live: -1 #毫秒
-  mvc:
-    view:
-      prefix: classpath:/templates/
-      suffix: .html
+#  mvc:
+#    view:
+#      prefix: templates/  #classpath:/templates/
+#      suffix: .htm
 
 
 mybatis:

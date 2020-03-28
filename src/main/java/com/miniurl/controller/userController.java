@@ -96,8 +96,7 @@ public class userController {
             }
             //这里发送邮件
             return CommonJson.success(new HashMap<String,String>(){{
-                put("VERIFY_URL","http://" + request.getServerName()+ ":"+
-                        request.getServerPort()+ request.getRequestURI().replace("/register","")+
+                put("VERIFY_URL","http://" + request.getServerName()+request.getRequestURI().replace("/register","")+
                         "/confirm"+"?userid="+s.get("userid")+
                         "&check="+s.get("code"));
                 put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(jsonParam.getString("email"),"@"));
