@@ -24,7 +24,7 @@ public class UrlmapCleanTask {
     @Autowired
     urlmapService urlmapService;
     private static final Logger logger = LoggerFactory.getLogger("UrlmapCleanTask");
-    @Scheduled(fixedRate=1000*60*60*12)
+    @Scheduled(fixedRate=1000*60*60*2)
     //@Scheduled(fixedRate=1000*60*5)
     private void configureTasks() {
         logger.info("开始urlmap清理: " + LocalDateTime.now());
