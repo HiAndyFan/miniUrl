@@ -153,7 +153,7 @@ public class userController {
             }});
         }
     }
-    @GetMapping("/getinfo")
+    @PostMapping("/getinfo")
     public CommonJson getInfo(@RequestBody JSONObject jsonParam){
         String token=jsonParam.getString("token");
         if(!redisUtils.hasKey("token:"+token)){
