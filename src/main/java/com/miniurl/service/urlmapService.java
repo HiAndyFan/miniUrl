@@ -1,7 +1,7 @@
 package com.miniurl.service;
 
-import com.miniurl.entity.Urlmap;
-import com.miniurl.entity.User;
+import com.miniurl.repository.entity.Urlmap;
+import com.miniurl.repository.entity.User;
 
 import java.util.List;
 

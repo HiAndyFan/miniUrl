@@ -1,8 +1,7 @@
 package com.miniurl.pojo;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.miniurl.entity.User;
+import com.miniurl.repository.entity.User;
 
 public class JWTTools {
     public String getToken(User user) {

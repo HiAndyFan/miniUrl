@@ -2,14 +2,13 @@ package com.miniurl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.miniurl.entity.User;
+import com.miniurl.repository.entity.User;
 import com.miniurl.pojo.JWTTools;
 import com.miniurl.service.urlmapService;
 import com.miniurl.service.userService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
 import com.miniurl.utils.kaptchaUtil;
-import com.miniurl.utils.mail.MailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

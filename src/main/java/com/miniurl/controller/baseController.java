@@ -1,7 +1,7 @@
 package com.miniurl.controller;
 
-import com.miniurl.entity.Urlmap;
-import com.miniurl.entity.User;
+import com.miniurl.repository.entity.Urlmap;
+import com.miniurl.repository.entity.User;
 import com.miniurl.utils.RequestLimit;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.CommonJson;

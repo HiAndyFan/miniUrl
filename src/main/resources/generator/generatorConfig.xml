@@ -37,17 +37,17 @@
 
         <!-- 配置Java实体类存放位置 -->
         <javaModelGenerator
-                targetPackage="com.miniurl.entity"
+                targetPackage="com.miniurl.repository.entity"
                 targetProject="src/main/java"/>
 
         <!-- 配置XxxMapper.xml存放位置 -->
         <sqlMapGenerator
-                targetPackage="mapper"
+                targetPackage="mapperXML"
                 targetProject="src/main/resources"/>
 
         <!-- 配置XxxMapper.java存放位置 -->
         <javaClientGenerator
-                targetPackage="com.miniurl.mapper"
+                targetPackage="com.miniurl.repository.mapper"
                 targetProject="src/main/java"
                 type="XMLMAPPER"/>
 

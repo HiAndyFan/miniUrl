@@ -4,7 +4,7 @@ server:
     context-path: /
     session:
       cookie:
-        name: miniurl
+        name: session
 
 spring:
   datasource:

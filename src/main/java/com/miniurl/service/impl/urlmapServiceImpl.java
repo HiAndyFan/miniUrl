@@ -1,8 +1,8 @@
 package com.miniurl.service.impl;
 
-import com.miniurl.entity.Urlmap;
-import com.miniurl.entity.User;
-import com.miniurl.mapper.UrlmapMapper;
+import com.miniurl.repository.entity.Urlmap;
+import com.miniurl.repository.entity.User;
+import com.miniurl.repository.mapper.UrlmapMapper;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.miniurl.service;
 
-import com.miniurl.entity.User;
+import com.miniurl.repository.entity.User;
 
 import java.util.HashMap;
 import java.util.List;

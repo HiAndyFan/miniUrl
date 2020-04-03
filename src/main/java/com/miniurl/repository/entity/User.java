@@ -1,4 +1,4 @@
-package com.miniurl.entity;
+package com.miniurl.repository.entity;
 
 import java.util.Date;
 import javax.persistence.*;

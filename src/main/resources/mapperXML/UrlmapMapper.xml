@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.miniurl.repository.mapper.UrlmapMapper" >
+  <resultMap id="BaseResultMap" type="com.miniurl.repository.entity.Urlmap" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RESOURSE_ID" property="resourseId" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_URL" property="originalUrl" jdbcType="VARCHAR" />
+    <result column="ID_TTL" property="idTtl" jdbcType="INTEGER" />
+    <result column="REVISION" property="revision" jdbcType="VARCHAR" />
+    <result column="CREATED_BY_UID" property="createdByUid" jdbcType="VARCHAR" />
+    <result column="CREATED_BY_CLIENT" property="createdByClient" jdbcType="VARCHAR" />
+    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

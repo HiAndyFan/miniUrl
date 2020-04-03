@@ -1,7 +1,7 @@
 package com.miniurl;
 
-import com.miniurl.mapper.UrlmapMapper;
-import com.miniurl.mapper.UserMapper;
+import com.miniurl.repository.mapper.UrlmapMapper;
+import com.miniurl.repository.mapper.UserMapper;
 import com.miniurl.utils.RedisUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
