@@ -169,10 +169,11 @@
             },
             {
               "name": "CREATED_BY_UID",
-              "type": "IdOrKey",
+              "type": "Integer",
               "remark": "",
               "chnname": "创建人UID",
-              "notNull": true
+              "notNull": true,
+              "relationNoShow": false
             },
             {
               "name": "CREATED_BY_CLIENT",
@@ -366,7 +367,7 @@
               },
               {
                 "x": 397.7822265625,
-                "y": 212.19736842105263
+                "y": 202.17857142857144
               }
             ],
             "sourceAnchor": 8,
@@ -385,7 +386,7 @@
               },
               {
                 "x": 397.7822265625,
-                "y": 212.19736842105263
+                "y": 202.17857142857144
               }
             ],
             "sourceAnchor": 2,

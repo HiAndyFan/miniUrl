@@ -37,22 +37,7 @@ public class userController {
     @GetMapping(value = {"/register/regvalidatecode"})
     public void loginValidateCode(HttpServletRequest request, HttpServletResponse response) throws Exception{
         kaptchaUtil.validateCode(request,response,captchaProducer,"register_validate_code");
-    }/*
-    @RequestMapping("/checkLoginValidateCode")
-    @ResponseBody
-    public HashMap checkLoginValidateCode(HttpServletRequest request,@RequestParam("validateCode")String validateCode) {
-        String loginValidateCode = request.getSession().getAttribute("register_validate_code").toString();
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        if(loginValidateCode == null){
-            map.put("status",null);//验证码过期
-        }else if(loginValidateCode.equals(validateCode)){
-            map.put("status",true);//验证码正确
-        }else if(!loginValidateCode.equals(validateCode)){
-            map.put("status",false);//验证码不正确
-        }
-        map.put("code",200);
-        return map;
-    }*/
+    }
 
     @PostMapping("/register")
     public CommonJson register(HttpServletRequest request,@RequestBody JSONObject jsonParam){
@@ -144,7 +129,7 @@ public class userController {
         } else {
             String token = jwtTools.getToken(userInDataBase);
             userService.updateLoginTime(userInDataBase);
-            redisUtils.set("token:"+token,userInDataBase.getUserId(),7200);
+            redisUtils.set(token,userInDataBase.getUserId(),7200);
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());
                 put("token",token);
@@ -155,13 +140,13 @@ public class userController {
     @PostMapping("/getinfo")
     public CommonJson getInfo(@RequestBody JSONObject jsonParam){
         String token=jsonParam.getString("token");
-        if(!redisUtils.hasKey("token:"+token)){
+        if(!redisUtils.hasKey(token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
                 put("code","210");
             }});
         }
-        User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
+        User userInDB=userService.getById(redisUtils.get(token).toString());
         if(userInDB==null){
             logger.warn("/getinfo有token但是没有注册");
             return CommonJson.success(new HashMap<>(){{
@@ -174,7 +159,7 @@ public class userController {
                 put("code","205");
             }});
         }
-        redisUtils.expire("token:"+token, 7200);
+        redisUtils.expire(token, 7200);
         return CommonJson.success(new HashMap<>(){{
             put("userid",userInDB.getUserId());
             put("email",userInDB.getUserEmail());
@@ -190,13 +175,13 @@ public class userController {
             @RequestParam(name = "token")String token,
             @RequestParam(name = "currentPage",defaultValue = "1")Integer currentPage,
             @RequestParam(name ="pageSize",defaultValue = "10")Integer pageSize){
-        if(!redisUtils.hasKey("token:"+token)){
+        if(!redisUtils.hasKey(token)){
             return CommonJson.success(new HashMap<>(){{
                 put("msg","用户未登录或登录超时");
                 put("code","210");
             }});
         }
-        User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
+        User userInDB=userService.getById(redisUtils.get(token).toString());
         return CommonJson.success(urlmapService.getByPage(userInDB,currentPage,pageSize));
     }
 }

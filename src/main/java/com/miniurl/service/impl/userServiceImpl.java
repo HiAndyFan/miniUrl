@@ -39,10 +39,11 @@ public class userServiceImpl implements userService {
         user.setUrlNum(0);
         user.setUserClass("1");
         if(userMapper.insert(user) == SUCCESS) {
+            User finaluser = userMapper.selectByPrimaryKey(user);
             return new HashMap<>() {{
                 put("msg", "创建成功");
-                put("userid", user.getUserId().toString());
-                put("code", user.getUserEmailVerify());
+                put("userid", finaluser.getUserId().toString());
+                put("code", finaluser.getUserEmailVerify());
             }};
         }else return new HashMap<>() {{
             put("msg", "创建失败");

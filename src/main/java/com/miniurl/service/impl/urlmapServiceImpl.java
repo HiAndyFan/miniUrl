@@ -3,18 +3,22 @@ package com.miniurl.service.impl;
 import com.miniurl.entity.Urlmap;
 import com.miniurl.entity.User;
 import com.miniurl.mapper.UrlmapMapper;
+import com.miniurl.mapper.UserMapper;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 import static com.miniurl.pojo.MiniUrlGenerate.MiniUrlGenerate;
 @Service
 public class urlmapServiceImpl implements urlmapService {
     private final static int SUCCESS = 1;
     @Autowired
     private UrlmapMapper urlmapMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public String add(Urlmap urlmap) {
@@ -26,7 +30,14 @@ public class urlmapServiceImpl implements urlmapService {
         }
         urlmap.setResourseId(id);
         try{
-            if(urlmapMapper.insert(urlmap) == SUCCESS) return id;
+            if(urlmapMapper.insert(urlmap) == SUCCESS){
+                if(0 != urlmap.getCreatedByUid()){
+                    User user = userMapper.selectByPrimaryKey(urlmap.getCreatedByUid());
+                    user.setUrlNum(user.getUrlNum() + 1);
+                    userMapper.updateByPrimaryKey(user);
+                }
+                return id;
+            }
         } catch (Exception e){return "-1";}
         return "-1";
     }
@@ -58,7 +69,7 @@ public class urlmapServiceImpl implements urlmapService {
     @Override
     public List<Urlmap> getByPage(User user, Integer currentPage, Integer pageSize){
         List<Urlmap> urlmaps = urlmapMapper.select(new Urlmap(){{
-            setCreatedByUid(user.getUserId().toString());
+            setCreatedByUid(user.getUserId());
         }});
         Integer countNums = urlmapMapper.selectCount(new Urlmap());
         PageBean<Urlmap> page = new PageBean<>(currentPage,pageSize,countNums);

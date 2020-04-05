@@ -35,18 +35,18 @@ public class baseController {
             @RequestParam(name = "id_ttl",defaultValue = "7") Integer id_ttl,
             @RequestParam(name = "client",defaultValue = "web") String client
     ){
-        String UID="0";
+        int UID=0;
         if (!token.equals("0")) {//用户给了token
-            if(!redisUtils.hasKey("token:"+token))
+            if(!redisUtils.hasKey(token))
                 return CommonJson.failure("base.TOKEN_ILLEGAL","用户未登录或登录超时");
-            User user=userService.getById(redisUtils.get("token:"+token).toString());
+            User user=userService.getById(redisUtils.get(token).toString());
             if(user==null){
                 return CommonJson.failure("base.SYSTEM_FAIL","系统错误");//有token但是没有注册
             }else if(!user.getUserEmailVerify().equals("1")){
                 return CommonJson.failure("base.USER_UNVERIFIED","用户邮箱未验证");
             }
-            redisUtils.expire("token:"+token, 7200);
-            UID=user.getUserId().toString();
+            redisUtils.expire(token, 7200);
+            UID=user.getUserId();
         } else {
             if(id_ttl>7) id_ttl =7;
         }
@@ -55,7 +55,7 @@ public class baseController {
         if (!pattern.matcher(original_url).find()) {
             return CommonJson.failure("base.URL_ILLEGAL","输入地址非法");
         }
-        String finalUID = UID;
+        int finalUID = UID;
         Integer final_id_ttl = id_ttl;
         Urlmap urlmap=new Urlmap(){{
             setOriginalUrl(original_url);

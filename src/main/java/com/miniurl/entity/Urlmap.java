@@ -37,7 +37,7 @@ public class Urlmap {
      * 创建人UID
      */
     @Column(name = "CREATED_BY_UID")
-    private String createdByUid;
+    private Integer createdByUid;
 
     /**
      * 创建来源端
@@ -128,7 +128,7 @@ public class Urlmap {
      *
      * @return CREATED_BY_UID - 创建人UID
      */
-    public String getCreatedByUid() {
+    public Integer getCreatedByUid() {
         return createdByUid;
     }
 
@@ -137,7 +137,7 @@ public class Urlmap {
      *
      * @param createdByUid 创建人UID
      */
-    public void setCreatedByUid(String createdByUid) {
+    public void setCreatedByUid(Integer createdByUid) {
         this.createdByUid = createdByUid;
     }
 
