@@ -25,16 +25,18 @@ public class baseController {
     private RedisUtils redisUtils;
     @Autowired
     com.miniurl.service.userService userService;
-    @RequestLimit(count=10,time=1800)//半个小时
+    @RequestLimit(count=6,time=60)//一分钟6次
     @PostMapping("/createURL")
     public CommonJson createURL(
             HttpServletRequest request,
             @RequestParam(name = "token",defaultValue = "0") String token,
             @RequestParam(name = "original_url") String original_url,
-            @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,//TODO 手动设置资源码, resource拼错
+            @RequestParam(name = "resource_id",defaultValue = "") String resource_id,//TODO 修改数据库resource
             @RequestParam(name = "id_ttl",defaultValue = "7") Integer id_ttl,
             @RequestParam(name = "client",defaultValue = "web") String client
     ){
+        if(-1 != original_url.indexOf(request.getLocalName()))
+            return CommonJson.failure("base.NO_MATRYOSHKA_ALLOWED", "禁止套娃");
         int UID=0;
         if (!token.equals("0")) {//用户给了token
             if(!redisUtils.hasKey(token))
@@ -65,13 +67,13 @@ public class baseController {
             setCreatedTime(new Date());
             setCreatedByClient(client);
         }};
-        String resourse_idOut=urlmapService.add(urlmap);
-        if(!resourse_idOut.equals("-1")){
+        String resource_idOut=urlmapService.add(urlmap);
+        if(!resource_idOut.equals("-1")){
             return CommonJson.success(new HashMap<String,String>(){{
                 put("result_url","http://" + request.getServerName()+request.getRequestURI().replace("/createURL","")+
-                        "/"+resourse_idOut
+                        "/"+resource_idOut
                 );
-                put("resourse_id",resourse_idOut);
+                put("resource_id",resource_idOut);
                 put("ttl",final_id_ttl.toString());
             }});
         }

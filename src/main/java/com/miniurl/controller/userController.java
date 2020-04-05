@@ -45,25 +45,16 @@ public class userController {
         String cookieValidateCode = request.getSession().getAttribute("register_validate_code").toString();
         if(cookieValidateCode == null){
             //验证码过期
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","验证码过期");
-                put("code","201");
-            }});
+            return CommonJson.failure("user.VERIFYCODE_EXPIRED","验证码过期, 请重试");
         }else if(!cookieValidateCode.equals(validateCode)||validateCode.isEmpty()){
             //验证码不正确
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","验证码不正确");
-                put("code","202");
-            }});
+            return CommonJson.failure("user.WRONG_VERIFYCODE","验证码错误");
         }else if(cookieValidateCode.equals(validateCode)){
             //验证码正确
         }
         Pattern pattern = Pattern.compile("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
         if (!pattern.matcher(jsonParam.getString("email")).matches()||jsonParam.getString("password").length()<=5) {
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","邮箱格式错误");
-                put("code","203");
-            }});
+            return CommonJson.failure("user.WRONG_EMAIL_ADDR","邮箱格式错误");
         }
         HashMap<String,String> s=userService.add(new User(){{
             setUserEmail(jsonParam.getString("email"));
@@ -73,24 +64,18 @@ public class userController {
         }});
         if(s.get("code")!="0"){
             if(s.get("code")=="1"){
-                return CommonJson.success(new HashMap<String,String>(){{
-                    put("msg","注册失败，邮箱已注册");
-                    put("code","204");
-                }});
+                return CommonJson.failure("user.USER_ALREADY_EXISTS", "用户邮箱已注册");
             }
             //这里发送邮件
             return CommonJson.success(new HashMap<String,String>(){{
-                put("VERIFY_URL","http://" + request.getServerName()+request.getRequestURI().replace("/register","")+
-                        "/confirm"+"?userid="+s.get("userid")+
-                        "&check="+s.get("code"));
+//                put("VERIFY_URL","http://" + request.getServerName()+request.getRequestURI().replace("/register","")+
+//                        "/confirm"+"?userid="+s.get("userid")+
+//                        "&check="+s.get("code"));
                 put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(jsonParam.getString("email"),"@"));
                 put("msg","注册成功，等待验证邮箱");
-                put("code","205");
             }});
         }else {
-            return CommonJson.success(new HashMap<>(){{
-                put("code","206");
-            }});
+            return CommonJson.failure("user.UNKNOWN_FAILURE", "未知错误");
         }
     }
 
@@ -103,9 +88,9 @@ public class userController {
             setUserId(Integer.parseInt(userid));
             setUserEmailVerify(check);
         }})){
-            return CommonJson.success("验证通过");//待优化
+            return CommonJson.success();//TODO: 返回验证邮箱页面
         }else {
-            return CommonJson.success("验证失败");
+            return CommonJson.failure("","");
         }
     }
     @PostMapping("/login")
@@ -117,15 +102,9 @@ public class userController {
         }};
         User userInDataBase = userService.getByEmail(jsonParam.getString("email"));
         if (userInDataBase == null) {
-            return CommonJson.success(new HashMap<String,String>(){{
-                put("msg","该邮箱未注册");
-                put("code","207");
-            }});
+            return CommonJson.failure("user.USER_NOT_EXIST", "用户不存在");
         } else if (!userService.comparePassword(user, userInDataBase)) {
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","密码错误");
-                put("code","208");
-            }});
+            return CommonJson.failure("user.WRONG_PASSWORD", "用户名或密码错误");
         } else {
             String token = jwtTools.getToken(userInDataBase);
             userService.updateLoginTime(userInDataBase);
@@ -133,7 +112,6 @@ public class userController {
             return CommonJson.success(new HashMap<>(){{
                 put("username",userInDataBase.getUserName());
                 put("token",token);
-                put("code","209");
             }});
         }
     }
@@ -141,23 +119,14 @@ public class userController {
     public CommonJson getInfo(@RequestBody JSONObject jsonParam){
         String token=jsonParam.getString("token");
         if(!redisUtils.hasKey(token)){
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","用户未登录或登录超时");
-                put("code","210");
-            }});
+            return CommonJson.failure("user.TOKEN_ILLEGAL", "用户未登录或登陆超时");
         }
         User userInDB=userService.getById(redisUtils.get(token).toString());
         if(userInDB==null){
             logger.warn("/getinfo有token但是没有注册");
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","系统错误");//有token但是没有注册
-            }});
+            return CommonJson.failure("user.SYSTEM_FAIL", "系统错误");
         }else if(!userInDB.getUserEmailVerify().equals("1")){
-            return CommonJson.success(new HashMap<>(){{
-                put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
-                put("msg","未验证邮箱");
-                put("code","205");
-            }});
+            return CommonJson.failure("USER_UNVERIFIED", "用户邮箱未验证");
         }
         redisUtils.expire(token, 7200);
         return CommonJson.success(new HashMap<>(){{
@@ -176,10 +145,7 @@ public class userController {
             @RequestParam(name = "currentPage",defaultValue = "1")Integer currentPage,
             @RequestParam(name ="pageSize",defaultValue = "10")Integer pageSize){
         if(!redisUtils.hasKey(token)){
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","用户未登录或登录超时");
-                put("code","210");
-            }});
+            return CommonJson.failure("user.TOKEN_ILLEGAL", "用户未登录或登陆超时");
         }
         User userInDB=userService.getById(redisUtils.get(token).toString());
         return CommonJson.success(urlmapService.getByPage(userInDB,currentPage,pageSize));

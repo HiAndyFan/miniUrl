@@ -74,7 +74,13 @@ public class userServiceImpl implements userService {
     @Override
     public boolean comparePassword(User user,User userInDB){
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
-        return encoder.matches(user.getHashPass(), userInDB.getHashPass());
+        String hashPassInDB="", passInput ="";
+        try{
+            hashPassInDB = userInDB.getHashPass();
+            passInput = user.getHashPass();
+            return encoder.matches(passInput, hashPassInDB);
+        } catch (Exception e){}
+        return false;
     }
     @Override
     public boolean delete(User user) {
