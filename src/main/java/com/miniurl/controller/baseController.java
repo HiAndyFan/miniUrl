@@ -51,6 +51,7 @@ public class baseController {
             UID=user.getUserId();
         } else {
             if(id_ttl>7) id_ttl =7;
+            resource_id = "";
         }
         String regex = "^\\S+\\.\\w{2,}";
         Pattern pattern = Pattern.compile(regex);
@@ -59,15 +60,19 @@ public class baseController {
         }
         int finalUID = UID;
         Integer final_id_ttl = id_ttl;
+        String finalResID = resource_id;
         Urlmap urlmap=new Urlmap(){{
             setOriginalUrl(original_url);
             setIdTtl(final_id_ttl);
+            setResourseId(finalResID);
             setRevision("0");
             setCreatedByUid(finalUID);
             setCreatedTime(new Date());
             setCreatedByClient(client);
         }};
         String resource_idOut=urlmapService.add(urlmap);
+        if(resource_idOut.equals("101"))
+            return CommonJson.failure("base.RESOURCE_ID_EXIST", "短链接已被占用");
         if(!resource_idOut.equals("-1")){
             return CommonJson.success(new HashMap<String,String>(){{
                 put("result_url","http://" + request.getServerName()+request.getRequestURI().replace("/createURL","")+

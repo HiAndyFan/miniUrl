@@ -22,7 +22,15 @@ public class urlmapServiceImpl implements urlmapService {
 
     @Override
     public String add(Urlmap urlmap) {
-        String id=MiniUrlGenerate();
+        String id="";
+        if(urlmap.getResourseId().isEmpty())
+        {
+            id=MiniUrlGenerate();
+        } else {
+            id = urlmap.getResourseId();
+            Urlmap temp=urlmapMapper.selectByPrimaryKey(id);
+            if(temp != null) return "101";
+        }
         Urlmap temp=urlmapMapper.selectByPrimaryKey(id);
         while (temp!=null) {
             id = MiniUrlGenerate();
