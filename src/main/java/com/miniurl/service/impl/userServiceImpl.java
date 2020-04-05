@@ -116,5 +116,6 @@ public class userServiceImpl implements userService {
     public void updateLoginTime(User user){
         User userInDB=userMapper.selectByPrimaryKey(user);
         userInDB.setLastLoginTime(new Date());
+        userMapper.updateByPrimaryKey(userInDB);
     }
 }
