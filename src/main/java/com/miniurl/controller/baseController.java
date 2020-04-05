@@ -53,16 +53,19 @@ public class baseController {
             if(id_ttl>7) id_ttl =7;
             resource_id = "";
         }
-        String regex = "^\\S+\\.\\w{2,}";
-        Pattern pattern = Pattern.compile(regex);
-        if (!pattern.matcher(original_url).find()) {
+        Pattern pattern = Pattern.compile("^\\S+\\.\\w{2,}");
+        if (!pattern.matcher(original_url).find())
             return CommonJson.failure("base.URL_ILLEGAL","输入地址非法");
-        }
+        pattern = Pattern.compile("^\\w{3,5}://");
+        if (!pattern.matcher(original_url).find())
+            original_url= "http://" + original_url;
+
         int finalUID = UID;
         Integer final_id_ttl = id_ttl;
         String finalResID = resource_id;
+        String finalOriginal_url = original_url;
         Urlmap urlmap=new Urlmap(){{
-            setOriginalUrl(original_url);
+            setOriginalUrl(finalOriginal_url);
             setIdTtl(final_id_ttl);
             setResourseId(finalResID);
             setRevision("0");
