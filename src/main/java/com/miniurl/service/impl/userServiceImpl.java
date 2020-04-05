@@ -1,7 +1,7 @@
 package com.miniurl.service.impl;
 
-import com.miniurl.repository.entity.User;
-import com.miniurl.repository.mapper.UserMapper;
+import com.miniurl.entity.User;
+import com.miniurl.mapper.UserMapper;
 import com.miniurl.service.userService;
 import com.miniurl.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;

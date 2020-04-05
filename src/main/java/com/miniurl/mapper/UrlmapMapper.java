@@ -1,6 +1,6 @@
-package com.miniurl.repository.mapper;
+package com.miniurl.mapper;
 
-import com.miniurl.repository.entity.Urlmap;
+import com.miniurl.entity.Urlmap;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface UrlmapMapper extends Mapper<Urlmap> {

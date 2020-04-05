@@ -11,8 +11,8 @@
         <property name="endingDelimiter" value="`"/>
 
         <!-- 配置通用Mapper的MBG插件相关信息 -->
-        <plugin type="${mapper.plugin}">
-            <property name="mappers" value="${mapper.Mapper}"/>
+        <plugin type="${com.miniurl.mapper.plugin}">
+            <property name="mappers" value="${com.miniurl.mapper.Mapper}"/>
         </plugin>
 
         <commentGenerator>
@@ -37,7 +37,7 @@
 
         <!-- 配置Java实体类存放位置 -->
         <javaModelGenerator
-                targetPackage="com.miniurl.repository.entity"
+                targetPackage="com.miniurl.entity"
                 targetProject="src/main/java"/>
 
         <!-- 配置XxxMapper.xml存放位置 -->
@@ -47,7 +47,7 @@
 
         <!-- 配置XxxMapper.java存放位置 -->
         <javaClientGenerator
-                targetPackage="com.miniurl.repository.mapper"
+                targetPackage="com.miniurl.mapper"
                 targetProject="src/main/java"
                 type="XMLMAPPER"/>
 

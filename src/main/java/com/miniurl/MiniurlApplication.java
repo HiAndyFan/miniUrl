@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.spring.annotation.MapperScan;
 //exclude = DataSourceAutoConfiguration.class
 @SpringBootApplication()
-@MapperScan(value = "com.miniurl.repository.mapper")
+@MapperScan(value = "com/miniurl/mapper")
 public class MiniurlApplication {
     public static void main(String[] args) {
         SpringApplication.run(MiniurlApplication.class, args);

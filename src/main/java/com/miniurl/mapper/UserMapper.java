@@ -1,6 +1,6 @@
-package com.miniurl.repository.mapper;
+package com.miniurl.mapper;
 
-import com.miniurl.repository.entity.User;
+import com.miniurl.entity.User;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface UserMapper extends Mapper<User> {

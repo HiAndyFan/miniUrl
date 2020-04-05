@@ -1,8 +1,8 @@
 package com.miniurl.service.impl;
 
-import com.miniurl.repository.entity.Urlmap;
-import com.miniurl.repository.entity.User;
-import com.miniurl.repository.mapper.UrlmapMapper;
+import com.miniurl.entity.Urlmap;
+import com.miniurl.entity.User;
+import com.miniurl.mapper.UrlmapMapper;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,10 @@ public class urlmapServiceImpl implements urlmapService {
             temp = urlmapMapper.selectByPrimaryKey(id);
         }
         urlmap.setResourseId(id);
-        if(urlmapMapper.insert(urlmap) == SUCCESS) return id;
-        else return "-1";
+        try{
+            if(urlmapMapper.insert(urlmap) == SUCCESS) return id;
+        } catch (Exception e){return "-1";}
+        return "-1";
     }
 
     @Override

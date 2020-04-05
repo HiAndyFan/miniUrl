@@ -1,14 +1,14 @@
 package com.miniurl.controller;
 
-import com.miniurl.repository.entity.Urlmap;
-import com.miniurl.repository.entity.User;
-import com.miniurl.utils.RequestLimit;
+import com.miniurl.entity.Urlmap;
+import com.miniurl.entity.User;
 import com.miniurl.service.urlmapService;
 import com.miniurl.utils.CommonJson;
 import com.miniurl.utils.RedisUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.miniurl.utils.RequestLimit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +21,6 @@ import java.util.regex.Pattern;
 public class baseController {
     @Autowired
     private urlmapService urlmapService;
-    @Autowired
-    private HttpServletRequest request;
     @Resource
     private RedisUtils redisUtils;
     @Autowired
@@ -33,70 +31,59 @@ public class baseController {
             HttpServletRequest request,
             @RequestParam(name = "token",defaultValue = "0") String token,
             @RequestParam(name = "original_url") String original_url,
-            @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,
+            @RequestParam(name = "resourse_id",defaultValue = "") String resourse_id,//TODO 手动设置资源码, resource拼错
             @RequestParam(name = "id_ttl",defaultValue = "7") Integer id_ttl,
             @RequestParam(name = "client",defaultValue = "web") String client
     ){
         String UID="0";
-        if(!token.equals("0")&&!redisUtils.hasKey("token:"+token)){
-            return CommonJson.success(new HashMap<>(){{
-                //put("msg","用户未登录或登录超时");
-                put("code","101");
-            }});
-        }else if (!token.equals("0")) {
-            User userInDB=userService.getById(redisUtils.get("token:"+token).toString());
-            if(userInDB==null){
-                return CommonJson.success(new HashMap<>(){{
-                    //put("msg","系统错误");//有token但是没有注册
-                    put("code","102");
-                }});
-            }else if(!userInDB.getUserEmailVerify().equals("1")){
-                return CommonJson.success(new HashMap<>(){{
-                    put("urlToLoginEmail", "http://mail."+ StringUtils.substringAfter(userInDB.getUserEmail(),"@"));
-                    put("msg","未验证邮箱");
-                    put("code","103");
-                }});
+        if (!token.equals("0")) {//用户给了token
+            if(!redisUtils.hasKey("token:"+token))
+                return CommonJson.failure("base.TOKEN_ILLEGAL","用户未登录或登录超时");
+            User user=userService.getById(redisUtils.get("token:"+token).toString());
+            if(user==null){
+                return CommonJson.failure("base.SYSTEM_FAIL","系统错误");//有token但是没有注册
+            }else if(!user.getUserEmailVerify().equals("1")){
+                return CommonJson.failure("base.USER_UNVERIFIED","用户邮箱未验证");
             }
             redisUtils.expire("token:"+token, 7200);
-            UID=userInDB.getUserId().toString();
+            UID=user.getUserId().toString();
+        } else {
+            if(id_ttl>7) id_ttl =7;
         }
-        String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\/])+(\\?{0,1}(([A-Za-z0-9-~]+\\={0,1})([A-Za-z0-9-~]*)\\&{0,1})*)$";
+        String regex = "^\\S+\\.\\w{2,}";
         Pattern pattern = Pattern.compile(regex);
-        if (!pattern.matcher(original_url).matches()&& original_url.equals("")) {
-            return CommonJson.success(new HashMap<>(){{
-                put("msg","非法地址");
-                put("code","104");
-            }});
+        if (!pattern.matcher(original_url).find()) {
+            return CommonJson.failure("base.URL_ILLEGAL","输入地址非法");
         }
         String finalUID = UID;
-        Urlmap temp=new Urlmap(){{
+        Integer final_id_ttl = id_ttl;
+        Urlmap urlmap=new Urlmap(){{
             setOriginalUrl(original_url);
-            setIdTtl(id_ttl);
+            setIdTtl(final_id_ttl);
             setRevision("0");
             setCreatedByUid(finalUID);
             setCreatedTime(new Date());
             setCreatedByClient(client);
         }};
-        String resourse_idOut=urlmapService.add(temp);
+        String resourse_idOut=urlmapService.add(urlmap);
         if(!resourse_idOut.equals("-1")){
             return CommonJson.success(new HashMap<String,String>(){{
                 put("result_url","http://" + request.getServerName()+request.getRequestURI().replace("/createURL","")+
                         "/"+resourse_idOut
                 );
                 put("resourse_id",resourse_idOut);
-                put("ttl",id_ttl.toString());
-                put("code","105");
+                put("ttl",final_id_ttl.toString());
             }});
         }
-        return CommonJson.success("申请失败");
+        return CommonJson.failure("base.CREAT_MINIURL_FAIL","短链接创建失败");
     }
     @GetMapping("/{id}")
     public void redirect(HttpServletResponse response, @PathVariable String id) throws IOException {
-        Urlmap temp=urlmapService.getByID(new Urlmap(){{setResourseId(id);}});
-        if(temp!=null) {
-            response.sendRedirect(temp.getOriginalUrl());
+        Urlmap urlmapResult=urlmapService.getByID(new Urlmap(){{setResourseId(id);}});
+        if(urlmapResult!=null) {
+            response.sendRedirect(urlmapResult.getOriginalUrl());
         }else {
-            response.sendRedirect("/404.html");
+            response.sendRedirect("/404");
         }
     }
 }

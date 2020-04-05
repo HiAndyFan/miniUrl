@@ -1,7 +1,7 @@
 package com.miniurl.utils;
 
-import com.miniurl.repository.entity.Urlmap;
-import com.miniurl.repository.mapper.UrlmapMapper;
+import com.miniurl.entity.Urlmap;
+import com.miniurl.mapper.UrlmapMapper;
 import com.miniurl.service.urlmapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

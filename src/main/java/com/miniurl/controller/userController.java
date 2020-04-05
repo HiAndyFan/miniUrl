@@ -2,7 +2,7 @@ package com.miniurl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.miniurl.repository.entity.User;
+import com.miniurl.entity.User;
 import com.miniurl.pojo.JWTTools;
 import com.miniurl.service.urlmapService;
 import com.miniurl.service.userService;
