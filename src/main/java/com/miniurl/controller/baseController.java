@@ -96,4 +96,10 @@ public class baseController {
             response.sendRedirect("/404");
         }
     }
+
+    @GetMapping("/*/**")
+    public void redir404(HttpServletResponse response) throws IOException
+    {
+        response.sendRedirect("/404");
+    }
 }
