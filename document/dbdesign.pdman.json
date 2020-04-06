@@ -253,7 +253,7 @@
             },
             {
               "name": "CREATED_BY_UID",
-              "type": "IdOrKey",
+              "type": "Integer",
               "remark": "",
               "chnname": "创建人UID"
             },

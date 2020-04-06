@@ -11,7 +11,7 @@ spring:
     #   数据源基本配置
     username: tomcat
     password: zxc0
-    url: jdbc:mysql://localhost:3306/miniurl?characterEncoding=utf8&useSSL=true&serverTimezone=UTC&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/miniurl?characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
