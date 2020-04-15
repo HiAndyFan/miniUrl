@@ -56,16 +56,16 @@ public class userController {
         if (!pattern.matcher(jsonParam.getString("email")).matches()||jsonParam.getString("password").length()<=5) {
             return CommonJson.failure("user.WRONG_EMAIL_ADDR","邮箱格式错误");
         }
-        HashMap<String,String> s=userService.add(new User(){{
+        String addMsg=userService.add(new User(){{
             setUserEmail(jsonParam.getString("email"));
             setUserName(jsonParam.getString("username"));
             setHashPass(jsonParam.getString("password"));//明文
             setUserEmailVerify("0");
         }});
-        if(s.get("code")!="0"){
-            if(s.get("code")=="1"){
-                return CommonJson.failure("user.USER_ALREADY_EXISTS", "用户邮箱已注册");
-            }
+        if(addMsg=="userService.USER_ALREADY_EXISTS"){
+            return CommonJson.failure("user.USER_ALREADY_EXISTS", "用户邮箱已注册");
+        }
+        if(addMsg!="ok"){
             //这里发送邮件
             return CommonJson.success(new HashMap<String,String>(){{
 //                put("VERIFY_URL","http://" + request.getServerName()+request.getRequestURI().replace("/register","")+
@@ -74,9 +74,8 @@ public class userController {
                 put("urlToLoginEmail", "http://mail."+StringUtils.substringAfter(jsonParam.getString("email"),"@"));
                 put("msg","注册成功，等待验证邮箱");
             }});
-        }else {
-            return CommonJson.failure("user.UNKNOWN_FAILURE", "未知错误");
         }
+        return CommonJson.failure("user.UNKNOWN_FAILURE", "未知错误");
     }
 
     @GetMapping("/confirm")

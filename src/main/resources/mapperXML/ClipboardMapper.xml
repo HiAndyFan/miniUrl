@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.miniurl.mapper.ClipboardMapper" >
+  <resultMap id="BaseResultMap" type="com.miniurl.entity.Clipboard" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RESOURSE_ID" property="resourseId" jdbcType="INTEGER" />
+    <result column="CREATED_BY_UID" property="createdByUid" jdbcType="INTEGER" />
+    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="ID_TTL" property="idTtl" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>

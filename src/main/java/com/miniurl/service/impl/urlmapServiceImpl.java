@@ -52,6 +52,9 @@ public class urlmapServiceImpl implements urlmapService {
 
     @Override
     public boolean delete(Urlmap urlmap) {
+        User user = userMapper.selectByPrimaryKey(urlmap);
+        user.setUrlNum(user.getUrlNum()-1);
+        userMapper.updateByPrimaryKey(user);
         return urlmapMapper.deleteByPrimaryKey(urlmap) == SUCCESS;
     }
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 @Service
 public class userServiceImpl implements userService {
@@ -19,7 +18,7 @@ public class userServiceImpl implements userService {
     private UserMapper userMapper;
 
     @Override
-    public HashMap<String,String> add(User user) {
+    public String add(User user) {
         // 创建Example
         Example example = new Example(User.class);
         // 创建Criteria
@@ -27,10 +26,7 @@ public class userServiceImpl implements userService {
         // 添加条件
         criteria.andEqualTo("userEmail", user.getUserEmail());
         if(!userMapper.selectByExample(example).isEmpty()){
-            return new HashMap<>() {{
-                put("msg", "该邮箱已注册");
-                put("code", "201");
-            }};
+            return "userService.USER_ALREADY_EXISTS";
         }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         user.setHashPass(encoder.encode(user.getHashPass()));
@@ -39,16 +35,8 @@ public class userServiceImpl implements userService {
         user.setUrlNum(0);
         user.setUserClass("1");
         if(userMapper.insert(user) == SUCCESS) {
-            User finaluser = userMapper.selectByPrimaryKey(user);
-            return new HashMap<>() {{
-                put("msg", "创建成功");
-                put("userid", finaluser.getUserId().toString());
-                put("code", finaluser.getUserEmailVerify());
-            }};
-        }else return new HashMap<>() {{
-            put("msg", "创建失败");
-            put("code", "0");
-        }};
+            return "ok";
+        }else return "userService.UNKNOWN_FAILURE";
 
     }
 

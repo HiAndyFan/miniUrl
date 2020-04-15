@@ -29,8 +29,12 @@ public class UrlmapCleanTask {
         Integer num=0,fail=0;
         List<Urlmap> buffer=urlmapMapper.selectAll();
         for(Urlmap i : buffer) {
+            if(i.getIdTtl()==0) continue;
             if((new Date().getTime()-i.getCreatedTime().getTime())/(1000*3600*24)>=i.getIdTtl()){
-                if(!urlmapService.delete(i)) fail++;
+                if(!urlmapService.delete(i))
+                {
+                    fail++;
+                }
                 num++;
             }
         }
